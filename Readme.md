@@ -1,6 +1,6 @@
-#Hiking Club Trip List
+# Hiking Club Trip List
 
-##The Project:
+## The Project:
 
 Create webpages for handling trip creation and signup for a fictitious hiking club.
 
@@ -10,4 +10,4 @@ It is not the intention to create a full club website, just the pages required t
 
 A simulated, not a real, login will be used, as creating a proper login system is not the aim of the project. However, it is necessary to simulate login to demonstrate trip signup for different users.
 
-##***UNDER CONSTRUCTION***
+## ***UNDER CONSTRUCTION***
