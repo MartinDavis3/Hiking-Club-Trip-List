@@ -34,6 +34,9 @@ namespace HikingClubTripList.Controllers
             }
 
             var trip = await _context.Trips
+                .Include(t => t.Signups)
+                    .ThenInclude(s => s.Member)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.TripID == id);
             if (trip == null)
             {
@@ -54,13 +57,20 @@ namespace HikingClubTripList.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TripID,Date,Title,Level,Distance,ElevationGain,Description,MaxParticipants")] Trip trip)
+        public async Task<IActionResult> Create([Bind("Date,Title,Level,Distance,ElevationGain,Description,MaxParticipants")] Trip trip)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(trip);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(trip);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Please try again");
             }
             return View(trip);
         }

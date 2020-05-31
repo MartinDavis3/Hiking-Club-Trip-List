@@ -20,7 +20,6 @@ namespace HikingClubTripList.Models
         public DateTime Date { get; set; }
 
         [StringLength(30, MinimumLength = 5)]
-        [RegularExpression(@"^[A-Z]")]
         [Required]
         public string Title { get; set; }
 
@@ -41,7 +40,5 @@ namespace HikingClubTripList.Models
         public int MaxParticipants { get; set; }
 
         public ICollection<Signup> Signups { get; set; }
-
-
     }
 }
