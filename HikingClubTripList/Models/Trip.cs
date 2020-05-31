@@ -28,10 +28,10 @@ namespace HikingClubTripList.Models
         public Level Level { get; set; }
 
         [Range(0, 100)]
-        public float? Distance { get; set; }
+        public double? Distance { get; set; }
 
         [Range(-5000, 5000)]
-        public float? ElevationGain { get; set; }
+        public double? ElevationGain { get; set; }
 
         [StringLength(800)]
         public string Description { get; set; }
