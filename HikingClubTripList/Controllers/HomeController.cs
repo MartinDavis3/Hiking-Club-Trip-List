@@ -20,6 +20,9 @@ namespace HikingClubTripList.Controllers
 
         public IActionResult Index()
         {
+            // Fixed user for testing purposes.
+            // Change later to take user from simulated login
+            ViewData["LoggedInUser"] = 1;
             return View();
         }
 

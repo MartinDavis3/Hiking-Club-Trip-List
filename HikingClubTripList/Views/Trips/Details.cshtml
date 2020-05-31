@@ -52,24 +52,37 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.MaxParticipants)
         </dd>
+    </dl>
+    <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Signups)
+            Leader
         </dt>
-        <dd class="col-sm-10">
-            <table class="table">
-                <tr>
-                    <th>Name</th>
-                </tr>
-                @foreach (var item in Model.Signups)
+       @foreach (var item in Model.Signups)
+       {
+           if (item.AsLeader)
+           {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(modelItem => item.Member.Name)
+                </dd>
+           }
+       }
+       @{
+            string dtContent = "Participants";
+            foreach (var item in Model.Signups)
+            {
+                if (!item.AsLeader)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Member.Name)
-                        </td>
-                    </tr>
+                    <dt class="col-sm-2">
+                        @dtContent
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(modelItem => item.Member.Name)
+                    </dd>
+                    dtContent="";
                 }
-            </table>
-        </dd>
+            }
+         }
+    
     </dl>
 </div>
 <div>
