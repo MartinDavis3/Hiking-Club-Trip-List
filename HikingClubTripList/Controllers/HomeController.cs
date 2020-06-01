@@ -22,7 +22,7 @@ namespace HikingClubTripList.Controllers
         {
             // Fixed user for testing purposes.
             // Change later to take user from simulated login
-            ViewData["LoggedInUser"] = 6;
+            ViewData["LoggedInMember"] = 6;
             return View();
         }
 

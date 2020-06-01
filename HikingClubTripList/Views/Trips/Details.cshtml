@@ -57,19 +57,24 @@
         <dt class="col-sm-2">
             Leader
         </dt>
-       @foreach (var item in Model.Signups)
-       {
-           if (item.AsLeader)
-           {
+        @foreach (var item in Model.Signups)
+        {
+            if (item.AsLeader)
+            {
                 <dd class="col-sm-10">
                     @Html.DisplayFor(modelItem => item.Member.Name)
                 </dd>
-           }
-       }
-       @{
+            }
+        }
+        @{
             string dtContent = "Participants";
+            bool alreadySignedUp = false;
             foreach (var item in Model.Signups)
             {
+                if (item.Member.MemberID == ViewBag.LoggedInMember)
+                {
+                    alreadySignedUp = true;
+                }
                 if (!item.AsLeader)
                 {
                     <dt class="col-sm-2">
@@ -78,20 +83,26 @@
                     <dd class="col-sm-10">
                         @Html.DisplayFor(modelItem => item.Member.Name)
                     </dd>
-                    dtContent="";
+                    dtContent = "";
                 }
             }
-         }
-    
+        }
+
     </dl>
 </div>
 <div>
+    @{
+        string buttonType = "submit";
+        if (alreadySignedUp || Model.Signups.Count >= Model.MaxParticipants)
+        {
+            buttonType = "hidden";
+        }
+    }
     <a asp-action="Edit" asp-route-id="@Model.TripID">Edit</a> |
     <a asp-action="Index">Back to List</a> |
-    <!-- <a asp-controller="Signups" asp-action="SignUpForTrip" asp-route-tripid="@Model.TripID">Signup</a> -->
-    <form asp-controller="Signups" asp-action="SignUpForTrip" class="form">
-        <input asp-for="TripID" type="hidden"/>
-        <input type="submit" value="Signup" class="btn btn-primary" />
+    <form asp-action="SignUpForTrip" class="form">
+        <input asp-for="TripID" type="hidden" />
+        <input type=@buttonType value="Signup" class="btn btn-primary" />
     </form>
 
 </div>

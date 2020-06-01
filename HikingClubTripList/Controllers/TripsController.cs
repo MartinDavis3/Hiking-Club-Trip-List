@@ -28,6 +28,7 @@ namespace HikingClubTripList.Controllers
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewData["LoggedInMember"] = LoggedInMember();
             if (id == null)
             {
                 return NotFound();
@@ -159,6 +160,46 @@ namespace HikingClubTripList.Controllers
         {
             return _context.Trips.Any(e => e.TripID == id);
         }
+
+
+        // Methods to add Signups necessary to sign up participants on trips
+
+        // This is called directly by the signup button from the trip detail view.
+        // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUpForTrip([Bind("TripID")] Signup signup)
+        {
+
+            signup.MemberID = LoggedInMember();
+
+            try
+            {
+                if (ModelState.IsValid)
+            {
+                _context.Add(signup);
+                await _context.SaveChangesAsync();
+            }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to sign up. Please try again");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // For use inside controller. Does not need async methods as it will be called from an async Task.
+        private int LoggedInMember()
+        {
+            var member = _context.Members
+                .FirstOrDefault(m => m.IsLoggedIn);
+            if (member == null)
+            {
+                return 0;
+            }
+            return member.MemberID;
+        }
+
 
     }
 }
