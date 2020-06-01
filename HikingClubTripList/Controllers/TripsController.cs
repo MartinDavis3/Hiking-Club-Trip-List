@@ -66,6 +66,7 @@ namespace HikingClubTripList.Controllers
                 {
                     _context.Add(trip);
                     await _context.SaveChangesAsync();
+                    CreateLeaderSignup(trip.TripID);
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -163,6 +164,8 @@ namespace HikingClubTripList.Controllers
 
 
         // Methods to handle trip Signups.
+        // Should probably put these in a service layer, but due to time constraints, will leave them here for now.
+        // Will refactor later, as time allows.
 
         // This is called directly by the signup button from the trip detail view.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
@@ -207,6 +210,34 @@ namespace HikingClubTripList.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+
+        // This is called directly by trip create method.
+        // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
+        // Note: Need to add some error handling - currently the try/catch in unecessary.
+        public void CreateLeaderSignup(int tripID)
+        {
+            Signup leaderSignup = new Signup();
+
+            leaderSignup.MemberID = LoggedInMember();
+            leaderSignup.TripID = tripID;
+            leaderSignup.AsLeader = true;
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(leaderSignup);
+                    _context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to sign up. Please try again");
+            }
+        }
+
+
 
 
         // For use inside controller. Does not need async methods as it will be called from an async Task.
