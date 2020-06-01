@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HikingClubTripList.Data;
 using HikingClubTripList.Models;
+using System.Diagnostics;
 
 namespace HikingClubTripList.Controllers
 {
@@ -144,6 +145,7 @@ namespace HikingClubTripList.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool MemberExists(int id)
         {

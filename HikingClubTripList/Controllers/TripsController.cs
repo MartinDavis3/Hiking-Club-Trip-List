@@ -186,33 +186,36 @@ namespace HikingClubTripList.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Failed to sign up. Please try again");
+                ModelState.AddModelError("", "Failed to sign up. Please try again.");
             }
             return RedirectToAction(nameof(Index));
         }
-
-
 
         // This is called directly by the withdrawl button from the trip detail view.
         public async Task<IActionResult> WithdrawFromTrip([Bind("TripID")] Signup soughtSignup)
         {
             soughtSignup.MemberID = LoggedInMember();
 
-            if (ModelState.IsValid)
+            try
             {
-                var signup = await _context.Signups
-                    .FirstOrDefaultAsync(s => s.TripID == soughtSignup.TripID && s.MemberID == soughtSignup.MemberID);
-                if (signup == null)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError("", "signup not found");
+                    var signup = await _context.Signups
+                        .FirstOrDefaultAsync(s => s.TripID == soughtSignup.TripID && s.MemberID == soughtSignup.MemberID);
+                    if (signup == null)
+                    {
+                        ModelState.AddModelError("", "Failed to withdraw [signup not found].");
+                    }
+                    _context.Signups.Remove(signup);
+                    await _context.SaveChangesAsync();
                 }
-                _context.Signups.Remove(signup);
-                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to withdraw. Please try again.");
             }
             return RedirectToAction(nameof(Index));
         }
-
-        // The following methods are called from within async tasks, so do not need to use async methods.
 
         // This is called directly by trip CREATE method.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
@@ -235,7 +238,7 @@ namespace HikingClubTripList.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Failed to sign up. Please try again");
+                ModelState.AddModelError("", "Failed to create a sign up. Please try again");
             }
         }
 
@@ -248,14 +251,27 @@ namespace HikingClubTripList.Controllers
                 .Where(s => s.TripID == tripID)
                 .AsNoTracking()
                 .ToList();
-            foreach (var s in signups)
+            try
             {
-                _context.Signups.Remove(s);
+                if (signups == null)
+                {
+                    ModelState.AddModelError("", "Failed to withdraw [signup(s) not found].");
+                }
+                foreach (var s in signups)
+                {
+                    _context.Signups.Remove(s);
+                }
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to remove signup(s). Please try again");
+            }
         }
 
-
+        // This returns the MemberId of the logged in user.
+        // If nobody is logged in, zero is returned.
+        // (This would create an error in the callinging method, but these methods should not be accessible if nobody is logged in.
         private int LoggedInMember()
         {
             var member = _context.Members
