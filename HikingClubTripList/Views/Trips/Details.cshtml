@@ -92,17 +92,27 @@
 </div>
 <div>
     @{
-        string buttonType = "submit";
-        if (alreadySignedUp || Model.Signups.Count >= Model.MaxParticipants)
+        string signupButtonType = "submit";
+        string withdrawButtonType = "hidden";
+        if (alreadySignedUp)
         {
-            buttonType = "hidden";
+            signupButtonType = "hidden";
+            withdrawButtonType = "submit";
+        }
+        if (Model.Signups.Count >= Model.MaxParticipants)
+        {
+            signupButtonType = "hidden";
         }
     }
     <a asp-action="Edit" asp-route-id="@Model.TripID">Edit</a> |
     <a asp-action="Index">Back to List</a> |
+    <form asp-action="WithdrawFromTrip" class="form">
+        <input asp-for="TripID" type="hidden" />
+        <input type=@withdrawButtonType value="Withdraw" class="btn btn-primary" />
+    </form>
     <form asp-action="SignUpForTrip" class="form">
         <input asp-for="TripID" type="hidden" />
-        <input type=@buttonType value="Signup" class="btn btn-primary" />
+        <input type=@signupButtonType value="Signup" class="btn btn-primary" />
     </form>
 
 </div>

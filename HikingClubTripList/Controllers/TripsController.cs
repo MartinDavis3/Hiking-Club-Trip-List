@@ -162,7 +162,7 @@ namespace HikingClubTripList.Controllers
         }
 
 
-        // Methods to add Signups necessary to sign up participants on trips
+        // Methods to handle trip Signups.
 
         // This is called directly by the signup button from the trip detail view.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
@@ -176,10 +176,10 @@ namespace HikingClubTripList.Controllers
             try
             {
                 if (ModelState.IsValid)
-            {
-                _context.Add(signup);
-                await _context.SaveChangesAsync();
-            }
+                {
+                    _context.Add(signup);
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (DbUpdateException)
             {
@@ -187,6 +187,27 @@ namespace HikingClubTripList.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+
+        // This is called directly by the withdrawl button from the trip detail view.
+        public async Task<IActionResult> WithdrawFromTrip([Bind("TripID")] Signup soughtSignup)
+        {
+            soughtSignup.MemberID = LoggedInMember();
+
+            if (ModelState.IsValid)
+            {
+                var signup = await _context.Signups
+                    .FirstOrDefaultAsync(s => s.TripID == soughtSignup.TripID && s.MemberID == soughtSignup.MemberID);
+                if (signup == null)
+                {
+                    ModelState.AddModelError("", "signup not found");
+                }
+                _context.Signups.Remove(signup);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // For use inside controller. Does not need async methods as it will be called from an async Task.
         private int LoggedInMember()
