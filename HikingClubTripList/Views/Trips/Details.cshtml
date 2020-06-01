@@ -88,5 +88,10 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.TripID">Edit</a> |
     <a asp-action="Index">Back to List</a> |
-    <a asp-controller="Signups" asp-action="Create" asp-route-tripid="@Model.TripID">Signup</a>
+    <!-- <a asp-controller="Signups" asp-action="SignUpForTrip" asp-route-tripid="@Model.TripID">Signup</a> -->
+    <form asp-controller="Signups" asp-action="SignUpForTrip" class="form">
+        <input asp-for="TripID" type="hidden"/>
+        <input type="submit" value="Signup" class="btn btn-primary" />
+    </form>
+
 </div>

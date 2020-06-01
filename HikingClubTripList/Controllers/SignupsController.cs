@@ -47,10 +47,13 @@ namespace HikingClubTripList.Controllers
         }
 
         // GET: Signups/Create
-        public IActionResult Create(int? TripID)
+        public async Task<IActionResult> Create(int? TripID)
         {
+            var member =  await _context.Members
+                .FirstOrDefaultAsync(m => m.IsLoggedIn);
+
             //The last parameter in SelectList is the item which will be selected by default
-            ViewData["MemberID"] = new SelectList(_context.Members, "MemberID", "Name");
+            ViewData["MemberID"] = new SelectList(_context.Members, "MemberID", "Name", member.MemberID);
             ViewData["TripID"] = new SelectList(_context.Trips, "TripID", "Title", TripID);
             return View();
         }
@@ -67,6 +70,31 @@ namespace HikingClubTripList.Controllers
                 _context.Add(signup);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            ViewData["MemberID"] = new SelectList(_context.Members, "MemberID", "Name", signup.MemberID);
+            ViewData["TripID"] = new SelectList(_context.Trips, "TripID", "Title", signup.TripID);
+            return View(signup);
+        }
+
+        // This is called directly by the signup button from the trip detail view.
+        // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUpForTrip([Bind("TripID")] Signup signup)
+        {
+            
+            var member = await _context.Members
+                .FirstOrDefaultAsync(m => m.IsLoggedIn);
+
+            signup.MemberID = member.MemberID;
+
+            string fragment = "/" + Convert.ToString(signup.TripID);
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(signup);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), "Trips", fragment);
             }
             ViewData["MemberID"] = new SelectList(_context.Members, "MemberID", "Name", signup.MemberID);
             ViewData["TripID"] = new SelectList(_context.Trips, "TripID", "Title", signup.TripID);
