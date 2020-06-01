@@ -28,6 +28,7 @@ namespace HikingClubTripList.Controllers
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewData["LoggedInMember"] = LoggedInMember();
             if (id == null)
             {
                 return NotFound();
@@ -65,6 +66,7 @@ namespace HikingClubTripList.Controllers
                 {
                     _context.Add(trip);
                     await _context.SaveChangesAsync();
+                    CreateLeaderSignup(trip.TripID);
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -159,6 +161,128 @@ namespace HikingClubTripList.Controllers
         {
             return _context.Trips.Any(e => e.TripID == id);
         }
+
+
+        // Methods to handle trip Signups.
+        // Should probably put these in a service layer, but due to time constraints, will leave them here for now.
+        // Will refactor later, as time allows.
+
+        // This is called directly by the signup button from the trip detail view.
+        // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUpForTrip([Bind("TripID")] Signup signup)
+        {
+
+            signup.MemberID = LoggedInMember();
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(signup);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to sign up. Please try again.");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // This is called directly by the withdrawl button from the trip detail view.
+        public async Task<IActionResult> WithdrawFromTrip([Bind("TripID")] Signup soughtSignup)
+        {
+            soughtSignup.MemberID = LoggedInMember();
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var signup = await _context.Signups
+                        .FirstOrDefaultAsync(s => s.TripID == soughtSignup.TripID && s.MemberID == soughtSignup.MemberID);
+                    if (signup == null)
+                    {
+                        ModelState.AddModelError("", "Failed to withdraw [signup not found].");
+                    }
+                    _context.Signups.Remove(signup);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to withdraw. Please try again.");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // This is called directly by trip CREATE method.
+        // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
+        // Note: Need to add some error handling - currently the try/catch in unecessary.
+        private void CreateLeaderSignup(int tripID)
+        {
+            Signup leaderSignup = new Signup();
+
+            leaderSignup.MemberID = LoggedInMember();
+            leaderSignup.TripID = tripID;
+            leaderSignup.AsLeader = true;
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(leaderSignup);
+                    _context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to create a sign up. Please try again");
+            }
+        }
+
+        // This is called directly by trip DELETE method.
+        // Only the trip ID is passed in, all the associated signups are found and then deleted.
+        // Note: Need to add some error handling.
+        private void DeleteAllTripAssociatedSignups(int tripID)
+        {
+            var signups = _context.Signups
+                .Where(s => s.TripID == tripID)
+                .AsNoTracking()
+                .ToList();
+            try
+            {
+                if (signups == null)
+                {
+                    ModelState.AddModelError("", "Failed to withdraw [signup(s) not found].");
+                }
+                foreach (var s in signups)
+                {
+                    _context.Signups.Remove(s);
+                }
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to remove signup(s). Please try again");
+            }
+        }
+
+        // This returns the MemberId of the logged in user.
+        // If nobody is logged in, zero is returned.
+        // (This would create an error in the callinging method, but these methods should not be accessible if nobody is logged in.
+        private int LoggedInMember()
+        {
+            var member = _context.Members
+                .FirstOrDefault(m => m.IsLoggedIn);
+            if (member == null)
+            {
+                return 0;
+            }
+            return member.MemberID;
+        }
+
 
     }
 }
