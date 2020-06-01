@@ -159,5 +159,7 @@ namespace HikingClubTripList.Controllers
         {
             return _context.Trips.Any(e => e.TripID == id);
         }
+
     }
 }
+
