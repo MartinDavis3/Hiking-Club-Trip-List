@@ -192,6 +192,7 @@ namespace HikingClubTripList.Controllers
         }
 
 
+
         // This is called directly by the withdrawl button from the trip detail view.
         public async Task<IActionResult> WithdrawFromTrip([Bind("TripID")] Signup soughtSignup)
         {
@@ -211,11 +212,12 @@ namespace HikingClubTripList.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // The following methods are called from within async tasks, so do not need to use async methods.
 
-        // This is called directly by trip create method.
+        // This is called directly by trip CREATE method.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
         // Note: Need to add some error handling - currently the try/catch in unecessary.
-        public void CreateLeaderSignup(int tripID)
+        private void CreateLeaderSignup(int tripID)
         {
             Signup leaderSignup = new Signup();
 
@@ -237,10 +239,23 @@ namespace HikingClubTripList.Controllers
             }
         }
 
+        // This is called directly by trip DELETE method.
+        // Only the trip ID is passed in, all the associated signups are found and then deleted.
+        // Note: Need to add some error handling.
+        private void DeleteAllTripAssociatedSignups(int tripID)
+        {
+            var signups = _context.Signups
+                .Where(s => s.TripID == tripID)
+                .AsNoTracking()
+                .ToList();
+            foreach (var s in signups)
+            {
+                _context.Signups.Remove(s);
+            }
+            _context.SaveChanges();
+        }
 
 
-
-        // For use inside controller. Does not need async methods as it will be called from an async Task.
         private int LoggedInMember()
         {
             var member = _context.Members
