@@ -15,7 +15,6 @@ namespace HikingClubTripList.Models
         public int TripID { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-mmm-yyyy}", ApplyFormatInEditMode = true)]
         [Required]
         public DateTime Date { get; set; }
 
@@ -30,12 +29,14 @@ namespace HikingClubTripList.Models
         public double? Distance { get; set; }
 
         [Range(-5000, 5000)]
+        [Display(Name = "Elevation Gain")]
         public double? ElevationGain { get; set; }
 
         [StringLength(800)]
         public string Description { get; set; }
 
         [Range(2, 12)]
+        [Display(Name = "Maximum Participants")]
         [Required]
         public int MaxParticipants { get; set; }
 
