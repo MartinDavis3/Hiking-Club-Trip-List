@@ -26,6 +26,8 @@ namespace HikingClubTripList.Models
         [Required]
         public string Name { get; set; }
 
+        public bool IsLoggedIn { get; set; }
+
         public ICollection<Signup> Signups { get; set; }
 
     }
