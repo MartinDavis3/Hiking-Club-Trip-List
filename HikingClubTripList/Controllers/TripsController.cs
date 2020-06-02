@@ -22,13 +22,23 @@ namespace HikingClubTripList.Controllers
         // GET: Trips
         public async Task<IActionResult> Index()
         {
+            // First checks if a user is logged in. If not sends view to home page.
+            var loggedInMember = LoggedInMember();
+            if (loggedInMember == null)
+            {
+                ViewData["LoggedInMemberName"] = "Guest";
+                return View("Views/Home/Index.cshtml");
+            }
+            ViewData["LoggedInMemberName"] = loggedInMember.Name;
             return View(await _context.Trips.ToListAsync());
         }
 
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewData["LoggedInMember"] = LoggedInMember();
+            var loggedInMember = LoggedInMember();
+            ViewData["LoggedInMember"] = loggedInMember.MemberID;
+            ViewData["LoggedInMemberName"] = loggedInMember.Name;
             if (id == null)
             {
                 return NotFound();
@@ -174,7 +184,7 @@ namespace HikingClubTripList.Controllers
         public async Task<IActionResult> SignUpForTrip([Bind("TripID")] Signup signup)
         {
 
-            signup.MemberID = LoggedInMember();
+            signup.MemberID = LoggedInMember().MemberID;
 
             try
             {
@@ -194,7 +204,7 @@ namespace HikingClubTripList.Controllers
         // This is called directly by the withdrawl button from the trip detail view.
         public async Task<IActionResult> WithdrawFromTrip([Bind("TripID")] Signup soughtSignup)
         {
-            soughtSignup.MemberID = LoggedInMember();
+            soughtSignup.MemberID = LoggedInMember().MemberID;
 
             try
             {
@@ -219,12 +229,11 @@ namespace HikingClubTripList.Controllers
 
         // This is called directly by trip CREATE method.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
-        // Note: Need to add some error handling - currently the try/catch in unecessary.
         private void CreateLeaderSignup(int tripID)
         {
             Signup leaderSignup = new Signup();
 
-            leaderSignup.MemberID = LoggedInMember();
+            leaderSignup.MemberID = LoggedInMember().MemberID;
             leaderSignup.TripID = tripID;
             leaderSignup.AsLeader = true;
 
@@ -244,7 +253,6 @@ namespace HikingClubTripList.Controllers
 
         // This is called directly by trip DELETE method.
         // Only the trip ID is passed in, all the associated signups are found and then deleted.
-        // Note: Need to add some error handling.
         private void DeleteAllTripAssociatedSignups(int tripID)
         {
             var signups = _context.Signups
@@ -269,20 +277,12 @@ namespace HikingClubTripList.Controllers
             }
         }
 
-        // This returns the MemberId of the logged in user.
-        // If nobody is logged in, zero is returned.
-        // (This would create an error in the callinging method, but these methods should not be accessible if nobody is logged in.
-        private int LoggedInMember()
+        private Member LoggedInMember()
         {
             var member = _context.Members
                 .FirstOrDefault(m => m.IsLoggedIn);
-            if (member == null)
-            {
-                return 0;
-            }
-            return member.MemberID;
+            return member;
         }
-
 
     }
 }
