@@ -151,5 +151,46 @@ namespace HikingClubTripList.Controllers
         {
             return _context.Members.Any(e => e.MemberID == id);
         }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoginSubmit([Bind("Username,Password")] Login login)
+        {
+            var member = await _context.Members
+                .FirstOrDefaultAsync(m => m.Username == login.Username && m.Password == login.Password);
+            if (member == null)
+            {
+                ViewData["Message"] = "Username/Password not found. Please try again.";
+                return View();
+            }
+            else
+            {
+                ViewData["Message"] = "Hello " + member.Name;
+                member.IsLoggedIn = true;
+                _context.Update(member);
+                await _context.SaveChangesAsync();
+            }
+            return View("Views/Home/Index.cshtml");
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            var member = _context.Members
+                .FirstOrDefault(m => m.IsLoggedIn);
+            if (member != null)
+            {
+                member.IsLoggedIn = false;
+                _context.Update(member);
+                await _context.SaveChangesAsync();
+            }
+            return View("Views/Home/Index.cshtml");
+        }
+
     }
 }
