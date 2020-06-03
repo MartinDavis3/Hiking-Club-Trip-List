@@ -75,22 +75,14 @@
 </div>
 <div class="panel-footer">
     @{
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Back to List</a><span> | </span>
         if (Model.IncludeDelete)
         {
             <a asp-action="Delete" asp-route-id="@Model.Trip.TripID">Delete</a><span> | </span>
         }
-        else
-        {
-            <span>Delete | </span>
-        }
         if (Model.IncludeEdit)
         {
-            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID">Edit</a><span> | </span>
-        }
-        else
-        {
-            <span>Edit | </span>
+            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID">Edit</a>
         }
         if (Model.IncludeWithdraw)
         {
@@ -99,18 +91,12 @@
                 <input type="submit" value="Withdraw" class="btn btn-primary" />
             </form>
         }
-        else
-        {
-        }
         if (Model.IncludeSignup)
         {
             <form asp-action="SignUpForTrip" class="form">
                 <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
                 <input type="submit" value="SignUp" class="btn btn-primary" />
             </form>
-        }
-        else
-        {
         }
     }
 </div>

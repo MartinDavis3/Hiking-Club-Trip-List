@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HikingClubTripList.Data;
 using HikingClubTripList.Models;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Reflection;
 
 namespace HikingClubTripList.Controllers
 {
@@ -31,7 +32,45 @@ namespace HikingClubTripList.Controllers
                 return View("Views/Home/Index.cshtml");
             }
             ViewData["LoggedInMemberName"] = loggedInMember.Name;
-            return View(await _context.Trips.ToListAsync());
+
+            //Gets the list of trips with signups and names for processing.
+            var trips = await _context.Trips
+                .Include(t => t.Signups)
+                    .ThenInclude(s => s.Member)
+                .AsNoTracking()
+                .ToListAsync();
+
+            //Iterate through all trips a signups to get leader and number of participants.
+            List<string> leaders = new List<string>();
+            int numberOfParticipants;
+            int spaces;
+            List<string> spacesLeft = new List<string>();
+            foreach (var t in trips)
+            {
+                numberOfParticipants = 0;
+                foreach (var s in t.Signups)
+                {
+                    numberOfParticipants++;
+                    if (s.AsLeader)
+                    {
+                        leaders.Add(s.Member.Name);
+                    }
+                }
+                //Calculate spaces left, using "Full" if none.
+                spaces = t.MaxParticipants - numberOfParticipants;
+                if (spaces <= 0)
+                {
+                    spacesLeft.Add("Full");
+                }
+                else
+                {
+                    spacesLeft.Add(spaces.ToString());
+                }
+            }
+            ViewData["LeadersList"] = leaders;
+            ViewData["SpacesLeftList"] = spacesLeft;
+
+            return View(trips);
         }
 
         // GET: Trips/Details/5
@@ -39,8 +78,8 @@ namespace HikingClubTripList.Controllers
         //Method too large. Refactor DB operations as separate service, if time allows.
         {
             var loggedInMember = LoggedInMember();
-            ViewData["LoggedInMember"] = loggedInMember.MemberID;
-            ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            //ViewData["LoggedInMember"] = loggedInMember.MemberID;
+            //ViewData["LoggedInMemberName"] = loggedInMember.Name;
             if (id == null)
             {
                 return NotFound();
