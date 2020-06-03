@@ -1,8 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Wandering Heights Hiking Club - Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Our Hiking Club</h1>
-    <p>Hello, @(ViewBag.LoggedInMemberName)</p>
-</div>
+    <Article>
+        <h1 class="display-4">Wandering Heights Hiking Club</h1>
+        <p>Welcome, @(ViewBag.LoggedInMemberName)</p>
+        <section>
+            <h3>About the Club</h3>
+            <p>We are a group of individuals who are passionate about hiking in the mountains, and anywhere else where there is open-space, fresh air and beautiful scenery!</p>
+            <p>The club is very much organised by us, for us. Hiking trips are organised by the members themselves and any member can join a trip. Our hope is that everyone can find trips to participate in that they will find enjoyable, relaxing, stimulating, exciting, thrilling or whatever it is that they are looking for.</p>
+            <p>While anybody can organise or participate in a trip, it is each individual’s responsibility to ensure that they have the ability to lead a trip that they organise, or to participate in a trip that they sign up for.</p>
+            <p>If you are interested in joining our club, please contact the club membership coordinator at: rmhc.membership@hmail.ca.</p>
+        </section>
+        <figure>
+            <img src="~/img/home-page-picture.jpg" alt="picture of river, forest and mountains" title="mountain scenery" width="600" />
+            <figcaption>Wondering where this is? Join us!</figcaption>
+        </figure>
+        <section>
+            <h3>The Trip Signup Webpages</h3>
+            <p>Access to the trip signup pages is restricted to members. Login credentials are supplied to members by the website coordinator.</p>
+            <p>To be able to see the trip listings, you must log in on the Login page.</p>
+            <p>The main List page shows a summary of all the trips:</p>
+            <ul>
+                <li>To add a new trip, use the button at the top of that page. </li>
+                <li>To see the details of each trip, use the link to the right of the specific trip listing.</li>
+            </ul>
+            <p>The Trip Details page shows the information which will help you decide if you would like to participate in the trip.</p>
+            <p>The buttons at the bottom of the page allow you to Delete, Edit, Withdraw, Sign up or Return to the List Page. The buttons you actually see will depend on the permissions / possibilities you have for this particular trip:</p>
+            <ul>
+                <li>Only the leader of a particular trip can delete or modify that trip.</li>
+                <li>Obviously, you can only withdraw from a trip if you are already signed up!</li>
+                <li>Equally, you can only sign up if you are not already participating. Additionally, space must be available on the trip.</li>
+            </ul>
+            <h4>Instructions for Trip Leaders</h4>
+            <p>When adding a trip, please try and provide as much information as possible, to help members decide if they would like to participate.</p>
+            <p>The following information is required: the date, a short (30 character) title, the level (use dropdown selection) and the maximum participants (including yourself).</p>
+            <p>You will automatically be assigned as the leader of the trip.</p>
+            <p>If you need to cancel a trip, the delete button will let you remove it. (You will be asked to confirmation, with the option to cancel, before the trip is actually deleted.) Note that participants will NOT be automatically informed of trip cancellation. You must do this.</p>
+            <p>You can edit details of the trip and then save the changes.</p>
+        </section>
+    </Article>
