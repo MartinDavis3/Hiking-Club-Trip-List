@@ -107,12 +107,18 @@ namespace HikingClubTripList.Controllers
                 if (signup.AsLeader)
                 {
                     leaderName = signup.Member.Name;
-                    loggedInMemberIsLeader = (loggedInMember.MemberID == signup.MemberID);
+                    if (loggedInMember.MemberID == signup.MemberID)
+                    {
+                        loggedInMemberIsLeader = true;
+                    }
                 }
                 else
                 {
                     participantNames.Add(signup.Member.Name);
-                    loggedInMemberIsParticipant = (loggedInMember.MemberID == signup.MemberID);
+                    if (loggedInMember.MemberID == signup.MemberID)
+                    {
+                        loggedInMemberIsParticipant = true;
+                    }
                 }
             }
 
