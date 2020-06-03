@@ -28,7 +28,10 @@ namespace HikingClubTripList.Controllers
             {
                 ViewData["LoggedInMemberName"] = "Guest";
             }
-            ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            else
+            {
+                ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            }
             return View();
         }
 
