@@ -1,126 +1,116 @@
-﻿@model HikingClubTripList.Models.Trip
+﻿@model HikingClubTripList.Models.TripDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Trip Details - Hello, @(ViewBag.LoggedInMemberName)</h1>
-
+<h1>Trip Details</h1>
+<h4>@Html.DisplayFor(model => model.MemberName)</h4>
+<hr />
 <div>
-    <h4>Trip</h4>
-    <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Trip.Date)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.Trip.Date)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Trip.Title)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Trip.Title)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Level)
+            @Html.DisplayNameFor(model => model.Trip.Level)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Level)
+            @Html.DisplayFor(model => model.Trip.Level)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Distance)
+            @Html.DisplayNameFor(model => model.Trip.Distance)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Distance)
+            @Html.DisplayFor(model => model.Trip.Distance)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ElevationGain)
+            @Html.DisplayNameFor(model => model.Trip.ElevationGain)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ElevationGain)
+            @Html.DisplayFor(model => model.Trip.ElevationGain)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Trip.Description)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Trip.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxParticipants)
+            @Html.DisplayNameFor(model => model.Trip.MaxParticipants)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MaxParticipants)
+            @Html.DisplayFor(model => model.Trip.MaxParticipants)
         </dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-2">
             Leader
         </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LeaderName)
+        </dd>
         @{
-            bool loggedInMemberIsLeader = false;
-            foreach (var item in Model.Signups)
+            string dtContent = "Participants:";
+            foreach (var item in Model.ParticipantNames)
             {
-                if (item.AsLeader)
-                {
-                    if (item.Member.MemberID == ViewBag.LoggedInMember)
-                    {
-                        loggedInMemberIsLeader = true;
-                    }
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(modelItem => item.Member.Name)
-                    </dd>
-                }
-            }
-            string dtContent = "Participants";
-            bool alreadySignedUp = false;
-            foreach (var item in Model.Signups)
-            {
-                if (!item.AsLeader)
-                {
-                    <!-- Check if signed in member already signed up. Does not apply to leader. Leader cannot widthdraw! -->
-                    if (item.Member.MemberID == ViewBag.LoggedInMember)
-                    {
-                        alreadySignedUp = true;
-                    }
-                    <dt class="col-sm-2">
-                        @dtContent
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(modelItem => item.Member.Name)
-                    </dd>
-                    dtContent = "";
-                }
+                <dt class="col-sm-2">
+                    @dtContent
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(modelItem => item)
+                </dd>
+                dtContent = "";
             }
         }
     </dl>
 </div>
-<div>
+<div class="panel-footer">
     @{
-        string signupButtonType = "submit";
-        string withdrawButtonType = "hidden";
-        if (alreadySignedUp)
+        <a asp-action="Index">Back to List</a>
+        if (Model.IncludeDelete)
         {
-            signupButtonType = "hidden";
-            withdrawButtonType = "submit";
+            <a asp-action="Delete" asp-route-id="@Model.Trip.TripID">Delete</a><span> | </span>
         }
-        if (Model.Signups.Count >= Model.MaxParticipants)
+        else
         {
-            signupButtonType = "hidden";
+            <span>Delete | </span>
         }
-        if (loggedInMemberIsLeader)
+        if (Model.IncludeEdit)
         {
-            signupButtonType = "hidden";
+            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID">Edit</a><span> | </span>
+        }
+        else
+        {
+            <span>Edit | </span>
+        }
+        if (Model.IncludeWithdraw)
+        {
+            <form asp-action="WithdrawFromTrip" class="form">
+                <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
+                <input type="submit" value="Withdraw" class="btn btn-primary" />
+            </form>
+        }
+        else
+        {
+        }
+        if (Model.IncludeSignup)
+        {
+            <form asp-action="SignUpForTrip" class="form">
+                <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
+                <input type="submit" value="SignUp" class="btn btn-primary" />
+            </form>
+        }
+        else
+        {
         }
     }
-    <a asp-action="Edit" asp-route-id="@Model.TripID">Edit</a> |
-    <a asp-action="Index">Back to List</a> |
-    <form asp-action="WithdrawFromTrip" class="form">
-        <input asp-for="TripID" type="hidden" />
-        <input type=@withdrawButtonType value="Withdraw" class="btn btn-primary" />
-    </form>
-    <form asp-action="SignUpForTrip" class="form">
-        <input asp-for="TripID" type="hidden" />
-        <input type=@signupButtonType value="Signup" class="btn btn-primary" />
-    </form>
 </div>
