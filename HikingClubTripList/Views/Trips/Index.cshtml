@@ -4,10 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Hiking Trip List - Hello, @(ViewBag.LoggedInMemberName)</h1>
+<h1>Hiking Trip List</h1>
+<h4>@(ViewBag.LoggedInMemberName)</h4>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add a New Trip</a>
 </p>
 <table class="table">
     <thead>
@@ -22,22 +23,18 @@
                 @Html.DisplayNameFor(model => model.Level)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Distance)
+                Leader
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ElevationGain)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaxParticipants)
+                Spaces Left
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @{ int i = 0;}
+@foreach (var item in Model)
+{
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
@@ -48,22 +45,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Level)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Distance)
+          <td>
+                @(ViewBag.LeadersList[i])
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ElevationGain)
+                @(ViewBag.SpacesLeftList[i])
             </td>
+            @{i++;
+            }
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxParticipants)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TripID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TripID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TripID">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.TripID">Details</a>
             </td>
         </tr>
 }

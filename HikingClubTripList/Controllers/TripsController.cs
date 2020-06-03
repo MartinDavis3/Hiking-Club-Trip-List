@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HikingClubTripList.Data;
 using HikingClubTripList.Models;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Reflection;
 
 namespace HikingClubTripList.Controllers
 {
@@ -30,15 +32,54 @@ namespace HikingClubTripList.Controllers
                 return View("Views/Home/Index.cshtml");
             }
             ViewData["LoggedInMemberName"] = loggedInMember.Name;
-            return View(await _context.Trips.ToListAsync());
+
+            //Gets the list of trips with signups and names for processing.
+            var trips = await _context.Trips
+                .Include(t => t.Signups)
+                    .ThenInclude(s => s.Member)
+                .AsNoTracking()
+                .ToListAsync();
+
+            //Iterate through all trips a signups to get leader and number of participants.
+            List<string> leaders = new List<string>();
+            int numberOfParticipants;
+            int spaces;
+            List<string> spacesLeft = new List<string>();
+            foreach (var t in trips)
+            {
+                numberOfParticipants = 0;
+                foreach (var s in t.Signups)
+                {
+                    numberOfParticipants++;
+                    if (s.AsLeader)
+                    {
+                        leaders.Add(s.Member.Name);
+                    }
+                }
+                //Calculate spaces left, using "Full" if none.
+                spaces = t.MaxParticipants - numberOfParticipants;
+                if (spaces <= 0)
+                {
+                    spacesLeft.Add("Full");
+                }
+                else
+                {
+                    spacesLeft.Add(spaces.ToString());
+                }
+            }
+            ViewData["LeadersList"] = leaders;
+            ViewData["SpacesLeftList"] = spacesLeft;
+
+            return View(trips);
         }
 
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
+        //Method too large. Refactor DB operations as separate service, if time allows.
         {
             var loggedInMember = LoggedInMember();
-            ViewData["LoggedInMember"] = loggedInMember.MemberID;
-            ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            //ViewData["LoggedInMember"] = loggedInMember.MemberID;
+            //ViewData["LoggedInMemberName"] = loggedInMember.Name;
             if (id == null)
             {
                 return NotFound();
@@ -54,7 +95,61 @@ namespace HikingClubTripList.Controllers
                 return NotFound();
             }
 
-            return View(trip);
+            //Business logic.
+            string leaderName = "Not Found";
+            bool loggedInMemberIsLeader = false;
+            bool loggedInMemberIsParticipant = false;
+            List<string> participantNames = new List<string>();
+            //Get leader and list of participants from the trip signups.
+            //Also determine if logged in member is a leader or participant (or neither).
+            foreach (var signup in trip.Signups)
+            {
+                if (signup.AsLeader)
+                {
+                    leaderName = signup.Member.Name;
+                    loggedInMemberIsLeader = (loggedInMember.MemberID == signup.MemberID);
+                }
+                else
+                {
+                    participantNames.Add(signup.Member.Name);
+                    loggedInMemberIsParticipant = (loggedInMember.MemberID == signup.MemberID);
+                }
+            }
+
+            //Determine which actions will be available.
+            bool tripIsFull = (participantNames.Count + 1 >= trip.MaxParticipants);
+            bool includeDelete = false;
+            bool includeEdit = false;
+            bool includeWithdraw = false;
+            bool includeSignup = false;
+            if (loggedInMemberIsLeader)
+            {
+                includeDelete = true;
+                includeEdit = true;
+            }
+            else if (loggedInMemberIsParticipant)
+            {
+                includeWithdraw = true;
+            }
+            else if (!tripIsFull)
+            {
+                includeSignup = true;
+            }
+
+            //Prepare view
+            var tripDetailsView = new TripDetailsViewModel
+            {
+                Trip = trip,
+                LeaderName = leaderName,
+                ParticipantNames = participantNames,
+                MemberName = loggedInMember.Name,
+                IncludeDelete = includeDelete,
+                IncludeEdit = includeEdit,
+                IncludeWithdraw = includeWithdraw,
+                IncludeSignup = includeSignup
+            };
+
+            return View(tripDetailsView);
         }
 
         // GET: Trips/Create
@@ -181,9 +276,11 @@ namespace HikingClubTripList.Controllers
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUpForTrip([Bind("TripID")] Signup signup)
+        public async Task<IActionResult> SignUpForTrip(int tripId)
         {
 
+            Signup signup = new Signup();
+            signup.TripID = tripId;
             signup.MemberID = LoggedInMember().MemberID;
 
             try
@@ -202,16 +299,18 @@ namespace HikingClubTripList.Controllers
         }
 
         // This is called directly by the withdrawl button from the trip detail view.
-        public async Task<IActionResult> WithdrawFromTrip([Bind("TripID")] Signup soughtSignup)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> WithdrawFromTrip(int tripID)
         {
-            soughtSignup.MemberID = LoggedInMember().MemberID;
+            int memberID = LoggedInMember().MemberID;
 
             try
             {
                 if (ModelState.IsValid)
                 {
                     var signup = await _context.Signups
-                        .FirstOrDefaultAsync(s => s.TripID == soughtSignup.TripID && s.MemberID == soughtSignup.MemberID);
+                        .FirstOrDefaultAsync(s => s.TripID == tripID && s.MemberID == memberID);
                     if (signup == null)
                     {
                         ModelState.AddModelError("", "Failed to withdraw [signup not found].");
