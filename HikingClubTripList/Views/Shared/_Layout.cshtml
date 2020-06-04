@@ -4,8 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wandering Height Hiking Club Trip Pages</title>
+    @*<link rel="stylesheet" href="~/css/meyer-reset.css" />*@ 
+    <link rel="stylesheet" href="~/css/aria.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
 </head>
 <body>
     <header>
@@ -33,12 +36,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Members</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Logout">Logout</a>
-                        </li>
+                        @if (@ViewBag.LoggedInMemberName == "Log In")
+                        {
+                            <li class="nav-item">
+                                <a class="navbar-brand" asp-area="" asp-controller="Members" asp-action="Login">Log In</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a id="member-name" class="navbar-brand"  asp-area="" asp-controller="Members" asp-action="Logout">@ViewBag.LoggedInMemberName</a>
+                                <span class="tooltiptext">Log Out</span>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

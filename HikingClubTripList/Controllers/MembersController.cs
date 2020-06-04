@@ -202,7 +202,7 @@ namespace HikingClubTripList.Controllers
                 _context.Update(member);
                 await _context.SaveChangesAsync();
             }
-            ViewData["LoggedInMemberName"] = "Guest";
+            ViewData["LoggedInMemberName"] = "Log In";
             return View("Views/Home/Index.cshtml");
         }
 

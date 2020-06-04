@@ -1,0 +1,51 @@
+﻿
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --testColour: red;
+}
+
+h1 {
+/*     color: var(--testColour) */
+}
+
+header {
+    position: fixed;
+    top: 0;
+    bottom: auto;
+    z-index: 1;
+}
+
+.pb-3 {
+    /* Provide space for fixed header*/
+    padding-top: 50px;
+}
+
+/* Code for tooltip from W3Schools:
+https://www.w3schools.com/css/css_tooltip.asp
+*/
+
+    /* Tooltip container */
+
+    /* Tooltip text */
+.tooltiptext {
+    visibility: hidden;
+/*    width: 120px;*/
+    background-color: black;
+    color: white;
+    font-size: 0.8em;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 0px;
+    /* Position the tooltip text - see examples below! */
+/*    left: 100px;*/
+    top: 10px;
+    left: 89%;
+    position: absolute;
+    z-index: 2;
+}
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+#member-name:hover + .tooltiptext {
+        visibility: visible;
+}
