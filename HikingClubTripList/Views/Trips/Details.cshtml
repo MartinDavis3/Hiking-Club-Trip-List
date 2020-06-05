@@ -56,26 +56,26 @@
     @{
         if (Model.IncludeDelete)
         {
-            <a asp-action="Delete" asp-route-id="@Model.Trip.TripID" class="link-btn-delete">Delete</a>
+            <a asp-action="Delete" asp-route-id="@Model.Trip.TripID" class="button link-btn link-btn-delete">Delete</a>
         }
         if (Model.IncludeEdit)
         {
-            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID" class="link-btn-edit">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID" class="button link-btn link-btn-edit">Edit</a>
         }
         if (Model.IncludeWithdraw)
         {
-            <form asp-action="WithdrawFromTrip" class="form frm-withdraw">
+            <form asp-action="WithdrawFromTrip" class="submit-form frm-withdraw">
                 <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
-                <input type="submit" value="Withdraw" class="btn-withdraw" />
+                <input type="submit" value="Withdraw" class="button submit-btn btn-withdraw" />
             </form>
         }
         if (Model.IncludeSignup)
         {
-            <form asp-action="SignUpForTrip" class="form">
+            <form asp-action="SignUpForTrip" class="submit-form frm-signup">
                 <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
-                <input type="submit" value="SignUp" class="btn btn-primary btn-signup" />
+                <input type="submit" value="Sign Up" class="button submit-btn btn-signup" />
             </form>
         }
-        <a asp-action="Index" class="action-link link-back-to-list">Back to List</a>
+        <a asp-action="Index" class="view-link link-back-to-list">Back to List</a>
     }
 </div>
