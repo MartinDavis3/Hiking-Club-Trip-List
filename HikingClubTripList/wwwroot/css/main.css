@@ -12,7 +12,13 @@ body {
     --textColour: #34391c;
     --viewLinkColour: #0060B7;
     --actionLinkColour: #0060B7;
+    --deleteColour: #AA406A;
+    --editColour: #4C2F54;
+    --withdrawColour: #A66400;
+    --signupColour: #586F00;
+    /*Used for testing*/
     --testColour: red;
+    /* Set colours for whole app*/
     background-color: var(--backgroundColour);
     color: var(--textColour);
 }
@@ -132,20 +138,19 @@ h2 {
 
 /* Trip List */
 
-
 .trip-table {
     font-size: 0.8rem;
 }
 
-    .trip-table th,
-    .trip-table td {
-        border-bottom-color: var(--textColour);
-        padding-top: 0.75em;
-        padding-bottom: 0.75em;
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-        border-bottom: 1px solid var(--textColour);
-    }
+.trip-table th,
+.trip-table td {
+    border-bottom-color: var(--textColour);
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-bottom: 1px solid var(--textColour);
+}
 
 .view-link {
     color: var(--viewLinkColour);  
@@ -155,6 +160,135 @@ h2 {
     color: var(--actionLinkColour);
 }
 
+/* Trip Details */
+
+.trip-details-title-panel {
+    position: fixed;
+    height: 40px;
+    width: 100%;
+    top: 60px;
+    bottom: auto;
+    z-index: 1;
+}
+
+/* First panal with trip description */
+
+.trip-detail {
+    display: grid;
+    grid-template-columns: repeat(3, calc( 100% / 3 ) );
+    grid-template-rows: auto, auto, auto;
+}
+
+.trip-date {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.trip-title {
+    grid-row: 1;
+    grid-column: 2 / span 2;
+}
+
+.trip-level {
+    grid-row: 2;
+    grid-column: 1 / span 1;
+}
+
+.trip-distance {
+    grid-row: 2;
+    grid-column: 2 / span 1;
+}
+
+.trip-elevation-gain {
+    grid-row: 2;
+    grid-column: 3 / span 1;
+}
+
+.trip-description {
+    grid-row: 3;
+    grid-column: 1 / span 3;
+}
+
+/* Second paneol with participant information */
+
+.trip-participant-info {
+    display: grid;
+    grid-template-columns: repeat(2, calc( 100% / 2 ) );
+    grid-template-rows: auto, auto, auto;
+}
+
+.trip-max-participants-title {
+    grid-row: 1;
+    grid-column: 1 / span 1;
+}
+
+.trip-max-participants {
+    grid-row: 1;
+    grid-column: 2 / span 1;
+}
+
+.trip-leader-title {
+    grid-row: 2;
+    grid-column: 1 / span 1;
+}
+
+.trip-leader {
+    grid-row: 2;
+    grid-column: 2 / span 1;
+}
+
+.trip-participants-title {
+    grid-row: 3;
+    grid-column: 1 / span 1;
+}
+
+.trip-participant-list {
+    grid-row: 3;
+    grid-column: 2 / span 1;
+}
+
+.trip-participant {
+    display: block;
+}
+
+.button-footer {
+/*    position: fixed;*/
+/*    width: 92vw;*/
+/*    bottom: 40px;*/
+/*    height: auto;*/
+    display: grid;
+    grid-template-columns: repeat(5, calc( 100% / 5 ) );
+    grid-template-rows: auto;
+}
+
+.link-button-delete {
+    grid-column: 1;
+}
+
+.link-button-edit {
+    grid-column: 2;
+}
+
+.frm-withdraw {
+    grid-column: 3;
+}
+
+.btn-signup {
+    grid-column: 4;
+}
+
+.link-back-to-list {
+    grid-column: 5;
+}
+
+.btn-withdraw {
+    background-color: var(--withdrawColour);
+    color: white;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
 
 

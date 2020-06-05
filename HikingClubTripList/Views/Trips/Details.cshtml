@@ -3,100 +3,79 @@
 @{
     ViewData["Title"] = "Details";
 }
-<h1>Trip Details</h1>
-<h4>@Html.DisplayFor(model => model.MemberName)</h4>
-<hr />
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.Date)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.Date)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.Level)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.Level)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.Distance)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.Distance)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.ElevationGain)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.ElevationGain)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Trip.MaxParticipants)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Trip.MaxParticipants)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Leader
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LeaderName)
-        </dd>
-        @{
-            string dtContent = "Participants:";
-            foreach (var item in Model.ParticipantNames)
-            {
-                <dt class="col-sm-2">
-                    @dtContent
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(modelItem => item)
-                </dd>
-                dtContent = "";
-            }
-        }
-    </dl>
+<div class="page-title-panel" role="presentation">
+    <h1>Trip Details</h1>
 </div>
-<div class="panel-footer">
+<dl class="trip-detail">
+    <dd class="trip-date">
+        @Html.DisplayFor(model => model.Trip.Date)
+    </dd>
+    <dd class="trip-title">
+        @Html.DisplayFor(model => model.Trip.Title)
+    </dd>
+    <dd class="trip-level">
+        @Html.DisplayFor(model => model.Trip.Level)
+    </dd>
+    <dd class="trip-distance">
+        @Html.DisplayFor(model => model.Trip.Distance) km
+    </dd>
+    <dd class="trip-elevation-gain">
+        @Html.DisplayFor(model => model.Trip.ElevationGain) m
+    </dd>
+    <dd class="trip-description">
+        @Html.DisplayFor(model => model.Trip.Description)
+    </dd>
+</dl>
+<dl class="trip-participant-info">
+    <dt class="trip-max-participants-title">
+        @Html.DisplayNameFor(model => model.Trip.MaxParticipants)
+    </dt>
+    <dd class="trip-max-participants">
+        @Html.DisplayFor(model => model.Trip.MaxParticipants)
+    </dd>
+    <dt class="trip-leader-title">
+        Leader
+    </dt>
+    <dd class="trip-leader">
+        @Html.DisplayFor(model => model.LeaderName)
+    </dd>
+    <dt class="trip-participants-title">
+        Participants:
+    </dt>
+    <dd class="trip-participant-list">
+       @foreach (var item in Model.ParticipantNames)
+        {
+        <span class="trip-participant">
+            @Html.DisplayFor(modelItem => item)
+        </span>
+        }
+    </dd>
+</dl>
+
+<div class="button-footer" role="presentation">
     @{
-        <a asp-action="Index">Back to List</a><span> | </span>
         if (Model.IncludeDelete)
         {
-            <a asp-action="Delete" asp-route-id="@Model.Trip.TripID">Delete</a><span> | </span>
+            <a asp-action="Delete" asp-route-id="@Model.Trip.TripID" class="link-btn-delete">Delete</a>
         }
         if (Model.IncludeEdit)
         {
-            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Trip.TripID" class="link-btn-edit">Edit</a>
         }
         if (Model.IncludeWithdraw)
         {
-            <form asp-action="WithdrawFromTrip" class="form">
+            <form asp-action="WithdrawFromTrip" class="form frm-withdraw">
                 <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
-                <input type="submit" value="Withdraw" class="btn btn-primary" />
+                <input type="submit" value="Withdraw" class="btn-withdraw" />
             </form>
         }
         if (Model.IncludeSignup)
         {
             <form asp-action="SignUpForTrip" class="form">
                 <input value="@Model.Trip.TripID" name="tripID" type="hidden" />
-                <input type="submit" value="SignUp" class="btn btn-primary" />
+                <input type="submit" value="SignUp" class="btn btn-primary btn-signup" />
             </form>
         }
+        <a asp-action="Index" class="action-link link-back-to-list">Back to List</a>
     }
 </div>

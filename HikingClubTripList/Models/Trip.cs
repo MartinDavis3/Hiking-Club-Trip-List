@@ -25,11 +25,12 @@ namespace HikingClubTripList.Models
         [Required]
         public Level Level { get; set; }
 
+        [Display(Name = "Distance (km)")]
         [Range(0, 100)]
         public double? Distance { get; set; }
 
         [Range(-5000, 5000)]
-        [Display(Name = "Elevation Gain")]
+        [Display(Name = "Elevation Gain (m)")]
         public double? ElevationGain { get; set; }
 
         [StringLength(800)]
