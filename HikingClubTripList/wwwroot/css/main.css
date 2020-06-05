@@ -1,51 +1,135 @@
-﻿
+﻿@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: auto;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    /* Colour variables to maintain standardised colouring*/
+    --backgroundColour: #e0e3bf;
     --testColour: red;
-}
-
-h1 {
-/*     color: var(--testColour) */
+    background-color: var(--backgroundColour);
 }
 
 header {
+    background-color: var(--backgroundColour);
     position: fixed;
+    width: 100%;
     top: 0;
     bottom: auto;
     z-index: 1;
 }
 
-.pb-3 {
-    /* Provide space for fixed header*/
-    padding-top: 50px;
+footer {
+    background-color: white;
 }
 
-/* Code for tooltip from W3Schools:
+.navbar-brand {
+    font-size: 1.1rem;
+}
+
+.navbar-brand img {
+    width: 20px;
+}
+
+.club-name-long {
+    visibility: hidden;
+    position:absolute;
+}
+
+.pb-3 {
+    /* Provide space for fixed header*/
+    padding-top: 60px;
+    background-color: var(--backgroundColour);
+}
+
+/* Tooltip modified from example given at W3Schools:
 https://www.w3schools.com/css/css_tooltip.asp
 */
-
-    /* Tooltip container */
 
     /* Tooltip text */
 .tooltiptext {
     visibility: hidden;
-/*    width: 120px;*/
     background-color: black;
     color: white;
     font-size: 0.8em;
     text-align: center;
     padding-left: 5px;
     padding-right: 5px;
-    border-radius: 0px;
-    /* Position the tooltip text - see examples below! */
-/*    left: 100px;*/
     top: 10px;
     left: 89%;
     position: absolute;
     z-index: 2;
 }
 
-    /* Show the tooltip text when you mouse over the tooltip container */
+/* Show the tooltip text when you mouse over the tooltip container */
 #member-name:hover + .tooltiptext {
         visibility: visible;
 }
+
+/* Home Page */
+
+.home-page {
+}
+
+h1 {
+    font-size: 1.4rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.home-page-picture {
+    width: 92vw;
+    /* To allow the caption to be positioned relative to figure container */
+    position: relative;
+    margin-top: -12vw;
+}
+
+.home-page-picture img {
+    width: 100%;
+}
+
+    .home-page-picture figcaption {
+    position: relative;
+    /* Need to reduce width from page width to width of text
+    otherwise moving left pushes it outside the screen area
+    and generates a horizontal scrollbar. */
+    width: 50%;
+    top: 12vw;
+    left: 48%;
+    text-align: right;
+    font-family: 'Courgette', cursive;
+    }
+
+.home-page p {
+    line-height: 1.2rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.home-page li {
+    line-height: 1.2rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.home-page ul {
+    margin-top: -0.5rem;
+    margin-left: 2rem;
+    padding-left:0
+}
+
+
+
+
+    
+    
+    
+    
+    
+    
