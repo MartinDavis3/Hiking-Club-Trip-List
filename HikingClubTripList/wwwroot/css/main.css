@@ -9,8 +9,12 @@ body {
     margin-right: auto;
     /* Colour variables to maintain standardised colouring*/
     --backgroundColour: #e0e3bf;
+    --textColour: #34391c;
+    --viewLinkColour: #0060B7;
+    --actionLinkColour: #0060B7;
     --testColour: red;
     background-color: var(--backgroundColour);
+    color: var(--textColour);
 }
 
 header {
@@ -22,7 +26,9 @@ header {
     z-index: 1;
 }
 
-footer {
+.footer {
+    height:40px;
+    line-height:40px;
     background-color: white;
 }
 
@@ -122,6 +128,31 @@ h2 {
     margin-top: -0.5rem;
     margin-left: 2rem;
     padding-left:0
+}
+
+/* Trip List */
+
+
+.trip-table {
+    font-size: 0.8rem;
+}
+
+    .trip-table th,
+    .trip-table td {
+        border-bottom-color: var(--textColour);
+        padding-top: 0.75em;
+        padding-bottom: 0.75em;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        border-bottom: 1px solid var(--textColour);
+    }
+
+.view-link {
+    color: var(--viewLinkColour);  
+}
+
+.action-link {
+    color: var(--actionLinkColour);
 }
 
 

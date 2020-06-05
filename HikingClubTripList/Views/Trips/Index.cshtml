@@ -5,12 +5,11 @@
 }
 
 <h1>Hiking Trip List</h1>
-<h4>@(ViewBag.LoggedInMemberName)</h4>
 
 <p>
-    <a asp-action="Create">Add a New Trip</a>
+    <a class="action-link" asp-action="Create">Add a New Trip</a>
 </p>
-<table class="table">
+<table class="trip-table">
     <thead>
         <tr>
             <th>
@@ -26,7 +25,7 @@
                 Leader
             </th>
             <th>
-                Spaces Left
+                Left
             </th>
             <th></th>
         </tr>
@@ -37,13 +36,15 @@
 {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @{string sd = Convert.ToString(item.Date).Substring(0, 6) + ".";
+                }@sd
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Level)
+                @{string abrv = Convert.ToString(item.Level).Substring(0, 3) + ".";
+                }@abrv
             </td>
           <td>
                 @(ViewBag.LeadersList[i])
@@ -54,7 +55,7 @@
             @{i++;
             }
             <td>
-                <a asp-action="Details" asp-route-id="@item.TripID">Details</a>
+                <a class="view-link" asp-action="Details" asp-route-id="@item.TripID">Details</a>
             </td>
         </tr>
 }
