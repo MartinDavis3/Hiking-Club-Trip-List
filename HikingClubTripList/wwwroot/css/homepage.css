@@ -1,10 +1,12 @@
 /* Home Page */
 
+.home-page section {
+}
+
 .home-page-picture {
-    width: 92vw;
     /* To allow the caption to be positioned relative to figure container */
     position: relative;
-    margin-top: -12vw;
+    margin-top: 1.5rem;
 }
 
     .home-page-picture img {
@@ -12,18 +14,23 @@
     }
 
     .home-page-picture figcaption {
-        position: relative;
+        position: absolute;
         /* Need to reduce width from page width to width of text
     otherwise moving left pushes it outside the screen area
     and generates a horizontal scrollbar. */
         width: 50%;
-        top: 12vw;
+        top: 0vw;
         left: 48%;
         text-align: right;
         font-family: 'Courgette', cursive;
     }
 
-.home-page p {
+        .home-page-picture figcaption p {
+            margin-top: 0.4rem;
+            margin-bottom: 0;
+        }
+        
+    .home-page p {
     line-height: 1.2rem;
     margin-top: 0.75rem;
     margin-bottom: 0.75rem;
@@ -39,4 +46,17 @@
     margin-top: -0.5rem;
     margin-left: 2rem;
     padding-left: 0
+}
+
+@media screen and (min-width: 575px) {
+    .home-page-picture figcaption p {
+        font-size: 1.2rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0;
+    }
+    
+   
+
+
+
 }

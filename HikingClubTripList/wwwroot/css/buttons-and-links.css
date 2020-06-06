@@ -40,8 +40,8 @@
 
 /* Note exact values required to centre text vertically */
 .link-btn {
-    padding-top: 16%;
-    padding-bottom: 16%;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .button {

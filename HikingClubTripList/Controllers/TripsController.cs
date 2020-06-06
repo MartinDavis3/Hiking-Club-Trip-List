@@ -79,7 +79,7 @@ namespace HikingClubTripList.Controllers
         {
             var loggedInMember = LoggedInMember();
             //ViewData["LoggedInMember"] = loggedInMember.MemberID;
-            //ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            ViewData["LoggedInMemberName"] = loggedInMember.Name;
             if (id == null)
             {
                 return NotFound();
