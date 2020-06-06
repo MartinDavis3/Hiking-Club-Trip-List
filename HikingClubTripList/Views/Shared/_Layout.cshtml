@@ -4,14 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wandering Height Hiking Club Trip Pages</title>
+    @*<link rel="stylesheet" href="~/css/meyer-reset.css" />*@ 
+    <link rel="stylesheet" href="~/css/aria.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.png" alt="Logo" title="Wandering Heights Hiking Club Logo" width="30"/> Wandering Heights Hiking Club - Trip Pages</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.png" alt="Logo" title="Wandering Heights Hiking Club Logo" width="30"/> Wandering Heights <span class="club-name-long">Hiking Club </span>- Trips</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,25 +30,32 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Trips</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Signups" asp-action="Index">Signups</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Logout">Logout</a>
-                        </li>
+@*                        <li class="nav-item">*@
+@*                            <a class="nav-link text-dark" asp-area="" asp-controller="Signups" asp-action="Index">Signups</a>*@
+@*                        </li>*@
+@*                        <li class="nav-item">*@
+@*                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Members</a>*@
+@*                        </li>*@
+                        @if (@ViewBag.LoggedInMemberName == "Log In")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Login">Log In</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a id="member-name" class="nav-link text-dark"  asp-area="" asp-controller="Members" asp-action="Logout">@ViewBag.LoggedInMemberName</a>
+                                <span class="tooltiptext">Log Out</span>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>

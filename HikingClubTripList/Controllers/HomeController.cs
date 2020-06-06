@@ -26,7 +26,7 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = LoggedInMember();
             if (loggedInMember == null)
             {
-                ViewData["LoggedInMemberName"] = "Guest";
+                ViewData["LoggedInMemberName"] = "Log In";
             }
             else
             {

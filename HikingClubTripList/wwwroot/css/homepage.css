@@ -1,0 +1,62 @@
+/* Home Page */
+
+.home-page section {
+}
+
+.home-page-picture {
+    /* To allow the caption to be positioned relative to figure container */
+    position: relative;
+    margin-top: 1.5rem;
+}
+
+    .home-page-picture img {
+        width: 100%;
+    }
+
+    .home-page-picture figcaption {
+        position: absolute;
+        /* Need to reduce width from page width to width of text
+    otherwise moving left pushes it outside the screen area
+    and generates a horizontal scrollbar. */
+        width: 50%;
+        top: 0vw;
+        left: 48%;
+        text-align: right;
+        font-family: 'Courgette', cursive;
+    }
+
+        .home-page-picture figcaption p {
+            margin-top: 0.4rem;
+            margin-bottom: 0;
+        }
+        
+    .home-page p {
+    line-height: 1.2rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.home-page li {
+    line-height: 1.2rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.home-page ul {
+    margin-top: -0.5rem;
+    margin-left: 2rem;
+    padding-left: 0
+}
+
+@media screen and (min-width: 575px) {
+    .home-page-picture figcaption p {
+        font-size: 1.2rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0;
+    }
+    
+   
+
+
+
+}

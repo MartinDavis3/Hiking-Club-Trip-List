@@ -1,0 +1,194 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+@import 'tooltip.css';
+@import 'homepage.css';
+@import 'trip-details.css';
+@import 'buttons-and-links.css';
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: auto;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    /* Colour variables to maintain standardised colouring*/
+    --backgroundColour: #e0e3bf; /* lightish green */
+    --textColour: #34391c; /* very dark green */
+    --viewLinkColour: #0060B7; /* blue */
+    --actionLinkColour: #0060B7; /* blue */
+    --deleteColour: #AA406A; /* dark pink */
+    --editColour: #46708E; /* blue grey */
+    --saveColour: #887402; /* dark yellow */
+    --withdrawColour: #A66400; /* dark orange */
+    --signupColour: #586F00; /* dark green */
+    --createColour: #80226c; /* purple */
+    --finalDeleteColour: #c82333; /* Default red*/
+    --buttonTextColour: #FFFFFF; /* white */
+    /* Outlines */
+    --withdrawOutline: #FFC01A;
+    --signupOutline: #ADD900;
+    --deleteOutline: #FF6FA8;
+    --editOutline: #2FA7FF;
+    --saveOutline: #F9D300;
+    --createOutline: #FF20CD;
+    --finalDeleteOutline: #FF707E;
+    /*Used for testing*/
+    --testColour: red;
+    /* Set colours for whole app*/
+    background-color: var(--backgroundColour);
+    color: var(--textColour);
+    /*    max-width: 1100px;*/
+}
+
+html {
+/*    background-color: var(--textColour);*/
+}
+
+header {
+/*    background-color: var(--backgroundColour);*/
+    position: fixed;
+    width: 100%;
+    height: 51px;
+    top: 0;
+    bottom: auto;
+    z-index: 1;
+/*    max-width: 1100px;*/
+}
+
+.footer {
+    height: 40px;
+    line-height: 40px;
+    background-color: white;
+/*    max-width: 1100px;*/
+}
+
+.navbar-brand {
+    font-size: 1.0rem;
+}
+
+.navbar-brand img {
+    width: 20px;
+}
+
+.club-name-long {
+    visibility: hidden;
+    position: absolute;
+}
+
+.container {
+/*    background-color: var(--backgroundColour);*/
+}
+
+/* class of the main section */
+main {
+    /* Provide space for fixed header*/
+    padding-top: 60px;
+/*    background-color: var(--backgroundColour);*/
+}
+
+h1 {
+    font-size: 1.4rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+/* Trip List */
+
+.trip-table {
+    font-size: 0.8rem;
+}
+
+.trip-table th,
+.trip-table td {
+    border-bottom-color: var(--textColour);
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-bottom: 1px solid var(--textColour);
+}
+
+.button-footer,
+.trip-detail-page {
+    max-width: 500px;
+}
+
+
+@media screen and (min-width: 400px) {
+    /* Fix the button width */
+
+    /* Stop stretching buttons with grid cell width */
+    .button-footer {
+        justify-items: center;
+    }
+
+    .button {
+        width: 74px;
+    }
+
+}
+
+
+/* Tablet */
+@media screen and (min-width: 768px) {
+
+    .trip-table {
+        font-size: 1rem;
+    }
+
+    body {
+        font-size: 16px;
+    }
+
+    .button {
+        width: 92px;
+    }
+
+}
+
+
+@media screen and (min-width: 1060px) {
+
+    .trip-detail-page,
+    .button-footer {
+        max-width: 1060px;
+    }
+
+    /* Show in two columns */
+    .trip-detail-page {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: auto auto auto;
+        column-gap: 60px;
+    }
+
+    .trip-detail {
+        grid-row: 2;
+        grid-column: 1;
+        align-self: start;
+    }
+
+    .trip-participant-info {
+        grid-row: 2;
+        grid-column: 2;
+        align-self: start;
+    }
+
+    .button-footer {
+        grid-row: 3;
+        grid-column: 1 / span 2;
+    }
+}
+
+
+    
+    
+    
+    
+    
+    
