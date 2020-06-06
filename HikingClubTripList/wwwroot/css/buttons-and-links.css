@@ -30,7 +30,7 @@
 
 /* Style the buttons (and associated forms) */
 
-/* Form fills container (grid cell) and is centers its contents*/
+/* Form fills container (grid cell) and is centers its contents */
 .submit-frm {
     width: 100%;
     height: 100%;
@@ -38,10 +38,18 @@
     margin-right: auto;
 }
 
-/* Note exact values required to centre text vertically */
+/* Note: exact values required to centre text vertically */
 .link-btn {
     padding-top: 12px;
     padding-bottom: 12px;
+}
+
+/* Stop normal hover etc. of link */
+.link-btn:hover,
+.link-btn:focus,
+.link-btn:active {
+    text-decoration: none;
+    color: var(--buttonTextColour)
 }
 
 .button {
@@ -58,25 +66,69 @@
     border-width: 1px;
 }
 
+/* Delete */
+
 .link-btn-delete {
     background-color: var(--deleteColour);
     border-color: var(--deleteColour);
 }
+
+.link-btn-delete:hover {
+    box-shadow: 0 0 2px 2px var(--deleteOutline);
+}
+
+.link-btn-delete:focus,
+.link-btn-delete:active {
+    box-shadow: 0 0 4px 4px var(--deleteOutline);
+}
+
+/* Edit */
 
 .link-btn-edit {
     background-color: var(--editColour);
     border-color: var(--editColour);
 }
 
+.link-btn-edit:hover {
+    box-shadow: 0 0 2px 2px var(--editOutline);
+}
+
+.link-btn-edit:focus,
+.link-btn-edit:active {
+    box-shadow: 0 0 4px 4px var(--editOutline);
+}
+
+/* Withdraw */
+
 .btn-withdraw {
     background-color: var(--withdrawColour);
     border-color: var(--withdrawColour);
 }
 
+.btn-withdraw:hover {
+    box-shadow: 0 0 2px 2px var(--withdrawOutline);
+}
+
+.btn-withdraw:focus,
+.btn-withdraw:active {
+    box-shadow: 0 0 4px 4px var(--withdrawOutline);
+}
+
+/* Signup */
 .btn-signup {
     background-color: var(--signupColour);
     border-color: var(--signupColour);
 }
+
+.btn-signup:hover {
+    box-shadow: 0 0 2px 2px var(--signupOutline);
+}
+
+.btn-signup:focus,
+.btn-signup:active {
+    box-shadow: 0 0 4px 4px var(--signupOutline);
+}
+
 
 .view-link {
     color: var(--viewLinkColour);
@@ -86,6 +138,8 @@
     color: var(--actionLinkColour);
 }
 
+/* Create */
+
 .btn-create {
     background-color: var(--createColour);
     border-color: var(--createColour);
@@ -93,16 +147,47 @@
     height: 40px;
 }
 
+.btn-create:hover {
+    box-shadow: 0 0 2px 2px var(--createOutline);
+}
+
+.btn-create:focus,
+.btn-create:active {
+    box-shadow: 0 0 4px 4px var(--createOutline);
+}
+
+/* Save edit */
 .btn-save-edit {
-    background-color: var(--editColour);
-    border-color: var(--editColour);
+    background-color: var(--saveColour);
+    border-color: var(--saveColour);
     width: calc( 100% / 5 );
     height: 40px;
 }
 
+.btn-save-edit:hover {
+    box-shadow: 0 0 2px 2px var(--saveOutline);
+}
+
+.btn-save-edit:focus,
+.btn-save-edit:active {
+    box-shadow: 0 0 4px 4px var(--saveOutline);
+}
+
+/* Final delete */
 .btn-final-delete {
+    background-color: var(--finalDeleteColour);
+    border-color: var(--finalDeleteColour);
     width: calc( 100% / 5 );
     height: 40px;
+}
+
+.btn-final-delete:hover {
+    box-shadow: 0 0 2px 2px var(--finalDeleteOutline);
+}
+
+.btn-final-delete:focus,
+.btn-final-delete:active {
+    box-shadow: 0 0 4px 4px var(--finalDeleteOutline);
 }
 
 /* This ensures good separation of delete button and

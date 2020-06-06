@@ -18,18 +18,28 @@ body {
     --textColour: #34391c; /* very dark green */
     --viewLinkColour: #0060B7; /* blue */
     --actionLinkColour: #0060B7; /* blue */
-    --deleteColour: #AA406A; /* dark red */
-    --editColour: #887402; /* dark yellow */
+    --deleteColour: #AA406A; /* dark pink */
+    --editColour: #46708E; /* blue grey */
+    --saveColour: #887402; /* dark yellow */
     --withdrawColour: #A66400; /* dark orange */
     --signupColour: #586F00; /* dark green */
-    --createColour: #80226c; /* dark yellow */
+    --createColour: #80226c; /* purple */
+    --finalDeleteColour: #c82333; /* Default red*/
     --buttonTextColour: #FFFFFF; /* white */
+    /* Outlines */
+    --withdrawOutline: #FFC01A;
+    --signupOutline: #ADD900;
+    --deleteOutline: #FF6FA8;
+    --editOutline: #2FA7FF;
+    --saveOutline: #F9D300;
+    --createOutline: #FF20CD;
+    --finalDeleteOutline: #FF707E;
     /*Used for testing*/
     --testColour: red;
     /* Set colours for whole app*/
-     background-color: var(--backgroundColour); 
+    background-color: var(--backgroundColour);
     color: var(--textColour);
-/*    max-width: 1100px;*/
+    /*    max-width: 1100px;*/
 }
 
 html {
