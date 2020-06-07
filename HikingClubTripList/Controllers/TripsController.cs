@@ -77,7 +77,6 @@ namespace HikingClubTripList.Controllers
 
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
-        //Method too large. Refactor DB operations as separate service, if time allows.
         {
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             //ViewData["LoggedInMember"] = loggedInMember.MemberID;
@@ -171,11 +170,37 @@ namespace HikingClubTripList.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // Add trip to database and test result of action
                     if( !await _tripService.AddTripAsync(trip))
                     {
                         // Error ocurred during add.
+                        ViewData["ErrorMessage"] = "An error ocurred trying to add the trip";
                     }
-                    CreateLeaderSignup(trip.TripID);
+
+                    // Add signup to this trip for logged in user as leader
+                    Signup leaderSignup = new Signup();
+
+                    var member = await _memberService.GetLoggedInMemberAsync();
+
+                    leaderSignup.MemberID = member.MemberID;
+                    leaderSignup.TripID = trip.TripID;
+                    leaderSignup.AsLeader = true;
+
+                    try
+                    {
+                        if (ModelState.IsValid)
+                        {
+                            if (!await _signupService.AddSignupAsync(leaderSignup))
+                            {
+                                // Error ocurred while adding signup.
+                                ViewData["ErrorMessage"] = "An error ocurred trying to add the leader signup for this trip";
+                            }
+                        }
+                    }
+                    catch (DbUpdateException)
+                    {
+                        ModelState.AddModelError("", "Failed to create a sign up. Please try again");
+                    }
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -203,8 +228,6 @@ namespace HikingClubTripList.Controllers
         }
 
         // POST: Trips/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TripID,Date,Title,Level,Distance,ElevationGain,Description,MaxParticipants")] Trip trip)
@@ -221,6 +244,7 @@ namespace HikingClubTripList.Controllers
                     if (!await _tripService.UpdateTripAsync(trip) )
                     {
                         // Error ocurred updating trip.
+                        ViewData["ErrorMessage"] = "An error ocurred trying to update the trip";
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -265,15 +289,12 @@ namespace HikingClubTripList.Controllers
             if (!await _tripService.RemoveTripAsync(id))
             {
                 // Error ocurred during delete.
+                ViewData["ErrorMessage"] = "An error ocurred trying to delete the trip";
             }
             return RedirectToAction(nameof(Index));
         }
 
-
-
         // Methods to handle trip Signups.
-        // Should probably put these in a service layer, but due to time constraints, will leave them here for now.
-        // Will refactor later, as time allows.
 
         // This is called directly by the signup button from the trip detail view.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
@@ -292,9 +313,10 @@ namespace HikingClubTripList.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if( !await _signupService.AddSignupAsync(signup) );
+                    if( !await _signupService.AddSignupAsync(signup) )
                     {
                         // Error ocurred while adding signup.
+                        ViewData["ErrorMessage"] = "An error ocurred trying to add the signup";
                     }
                 }
             }
@@ -314,7 +336,7 @@ namespace HikingClubTripList.Controllers
 
             try
             {
-                if ( member == null )
+                if ( member != null )
                 {
                     int memberID = member.MemberID;
                     var signup = await _signupService.GetSignupAsync(tripID, memberID);
@@ -327,63 +349,13 @@ namespace HikingClubTripList.Controllers
                     {
                         // Error ocurred removing signup
                     }
-               }
+                }
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Failed to withdraw. Please try again.");
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        // This is called directly by trip CREATE method.
-        // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
-        private async Task<IActionResult> CreateLeaderSignup(int tripID)
-        {
-            Signup leaderSignup = new Signup();
-
-            var member = await _memberService.GetLoggedInMemberAsync();
-
-            leaderSignup.MemberID = member.MemberID;
-            leaderSignup.TripID = tripID;
-            leaderSignup.AsLeader = true;
-
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (!await _signupService.AddSignupAsync(leaderSignup)) ;
-                    {
-                        // Error ocurred while adding signup.
-                    }
-                }
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "Failed to create a sign up. Please try again");
-            }
-        }
-
-        // This is called directly by trip DELETE method.
-        // Only the trip ID is passed in, all the associated signups are found and then deleted.
-        private async Task<IActionResult> DeleteAllTripAssociatedSignups(int tripID)
-        {
-            var signups = _signupService.GetAllSignupsForTripAsync(tripID);
-            try
-            {
-                if (signups == null)
-                {
-                    ModelState.AddModelError("", "Failed to withdraw [signup(s) not found].");
-                }
-                foreach (var s in signups)
-                {
-                    bool removeResult = _signupService.RemoveSignupAsync(s);
-                }
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "Failed to remove signup(s). Please try again");
-            }
         }
 
     }
