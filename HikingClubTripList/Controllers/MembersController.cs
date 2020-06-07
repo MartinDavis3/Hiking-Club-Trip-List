@@ -8,73 +8,78 @@ using Microsoft.EntityFrameworkCore;
 using HikingClubTripList.Data;
 using HikingClubTripList.Models;
 using System.Diagnostics;
+using HikingClubTripList.Services;
 
 namespace HikingClubTripList.Controllers
 {
     public class MembersController : Controller
     {
-        private readonly ClubContext _context;
+        private readonly IMemberService _memberService;
 
-        public MembersController(ClubContext context)
+        public MembersController(IMemberService memberService)
         {
-            _context = context;
+            _memberService = memberService;
         }
 
-
-        private bool MemberExists(int id)
-        {
-            return _context.Members.Any(e => e.MemberID == id);
-        }
+        // Routines handling login and logout.
+        // They always return a ViewData["LoggedInMemberName"] value,
+        // Which is used to dispay username (or Log In) in the nav bar.
 
         // This is the target of the Login nav tab.
-        // It checks to see if a user is already logged in.
-        // If so, it directs the view to the trips list page.
-        // Otherwise is returns to the login form view.
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
-            var member = _context.Members
-                .FirstOrDefault(m => m.IsLoggedIn);
+            var member = await _memberService.GetLoggedInMemberAsync();
+
             if (member != null)
             {
                 ViewData["LoggedInMemberName"] = member.Name;
                 return View("Views/Home/Index.cshtml");
             }
+            ViewData["LoggedInMemberName"] = "Log In";
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginSubmit([Bind("Username,Password")] Login login)
         {
-            var member = await _context.Members
-                .FirstOrDefaultAsync(m => m.Username == login.Username && m.Password == login.Password);
+            var member = await _memberService.GetValidMemberAsync(login);
             if (member == null)
             {
                 ViewData["Message"] = "Username/Password not found. Please try again.";
+                ViewData["LoggedInMemberName"] = "Log In";
                 return View("Views/Members/Login.cshtml");
             }
             else
             {
                 member.IsLoggedIn = true;
-                _context.Update(member);
-                await _context.SaveChangesAsync();
-                ViewData["LoggedInMemberName"] = member.Name;
-                return View("Views/Home/Index.cshtml");
+                if (await _memberService.ChangeMemberLoginStateAsync(member))
+                {
+                    ViewData["LoggedInMemberName"] = member.Name;
+                    return View("Views/Home/Index.cshtml");
+                }
+                else
+                {
+                    ViewData["Message"] = "Error logging In. Please try again.";
+                    ViewData["LoggedInMemberName"] = "Log In";
+                    return View("Views/Members/Login.cshtml");
+                }
             }
         }
 
-        // This is the target of the logout nav bar tab, which immediately
-        // logs the user out and sends the view back to the home page.
+        // This is the target of the logout nav bar tab.
         public async Task<IActionResult> LogOut()
         {
-            var member = _context.Members
-                .FirstOrDefault(m => m.IsLoggedIn);
+            var member = await _memberService.GetLoggedInMemberAsync();
             if (member != null)
             {
                 member.IsLoggedIn = false;
-                _context.Update(member);
-                await _context.SaveChangesAsync();
+                if (!await _memberService.ChangeMemberLoginStateAsync(member))
+                {
+                    ViewData["ErrorMessage"] = "An error ocurred trying to logout";
+                    ViewData["LoggedInMemberName"] = member.Name;
+                    return View("Views/Home/Index.cshtml");
+                }
             }
             ViewData["LoggedInMemberName"] = "Log In";
             return View("Views/Home/Index.cshtml");
