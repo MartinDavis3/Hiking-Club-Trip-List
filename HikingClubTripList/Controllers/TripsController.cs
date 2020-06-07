@@ -32,12 +32,11 @@ namespace HikingClubTripList.Controllers
         {
             // First checks if a user is logged in. If not sends view to home page.
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
             if (loggedInMember == null)
             {
-                ViewData["LoggedInMemberName"] = "Log In";
                 return View("Views/Home/Index.cshtml");
             }
-            ViewData["LoggedInMemberName"] = loggedInMember.Name;
 
             //Gets the list of trips with signups and names for processing.
             var trips = await _tripService.GetTripsListAsync();
@@ -79,8 +78,8 @@ namespace HikingClubTripList.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
-            //ViewData["LoggedInMember"] = loggedInMember.MemberID;
-            ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             if (id == null)
             {
                 return NotFound();
@@ -158,6 +157,9 @@ namespace HikingClubTripList.Controllers
         // GET: Trips/Create
         public IActionResult Create()
         {
+            var loggedInMember = _memberService.GetLoggedInMember();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             return View();
         }
 
@@ -166,6 +168,9 @@ namespace HikingClubTripList.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Date,Title,Level,Distance,ElevationGain,Description,MaxParticipants")] Trip trip)
         {
+            var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             try
             {
                 if (ModelState.IsValid)
@@ -214,6 +219,9 @@ namespace HikingClubTripList.Controllers
         // GET: Trips/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             if (id == null)
             {
                 return NotFound();
@@ -232,6 +240,9 @@ namespace HikingClubTripList.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TripID,Date,Title,Level,Distance,ElevationGain,Description,MaxParticipants")] Trip trip)
         {
+            var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             if (id != trip.TripID)
             {
                 return NotFound();
@@ -266,6 +277,9 @@ namespace HikingClubTripList.Controllers
         // GET: Trips/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             if (id == null)
             {
                 return NotFound();
@@ -285,6 +299,9 @@ namespace HikingClubTripList.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             if (!await _tripService.RemoveTripAsync(id))
             {
                 // Error ocurred during delete.
@@ -371,6 +388,18 @@ namespace HikingClubTripList.Controllers
                 ModelState.AddModelError("", "Failed to withdraw. Please try again.");
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        private void PlaceLoggedInNameInViewData(Member loggedInMember)
+        {
+            if (loggedInMember == null)
+            {
+                ViewData["LoggedInMemberName"] = "Log In";
+            }
+            else
+            {
+                ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            }
         }
 
     }

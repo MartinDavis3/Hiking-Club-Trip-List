@@ -1,6 +1,23 @@
 /* Home Page */
 
-.home-page section {
+.home-page div {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 3.2825vw;
+    margin-top: 0.5rem;
+}
+
+.home-page div img {
+    grid-column: 2;
+    justify-self: end;
+    align-self: center;
+    width: 10vw;
+    height: 6.565vw;
+
+}
+
+.home-page div h1 {
+    align-self: center;
 }
 
 .home-page-picture {
@@ -46,17 +63,4 @@
     margin-top: -0.5rem;
     margin-left: 2rem;
     padding-left: 0
-}
-
-@media screen and (min-width: 575px) {
-    .home-page-picture figcaption p {
-        font-size: 1.2rem;
-        margin-top: 0.6rem;
-        margin-bottom: 0;
-    }
-    
-   
-
-
-
 }

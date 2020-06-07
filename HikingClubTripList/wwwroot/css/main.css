@@ -34,34 +34,24 @@ body {
     --saveOutline: #F9D300;
     --createOutline: #FF20CD;
     --finalDeleteOutline: #FF707E;
-    /*Used for testing*/
-    --testColour: red;
     /* Set colours for whole app*/
     background-color: var(--backgroundColour);
     color: var(--textColour);
-    /*    max-width: 1100px;*/
-}
-
-html {
-/*    background-color: var(--textColour);*/
 }
 
 header {
-/*    background-color: var(--backgroundColour);*/
     position: fixed;
     width: 100%;
     height: 51px;
     top: 0;
     bottom: auto;
     z-index: 1;
-/*    max-width: 1100px;*/
 }
 
 .footer {
     height: 40px;
     line-height: 40px;
     background-color: white;
-/*    max-width: 1100px;*/
 }
 
 .navbar-brand {
@@ -72,24 +62,31 @@ header {
     width: 20px;
 }
 
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.link-btn:focus,
+.link-btn:active {
+    border-top-color: Var(--backgroundColour);
+    border-top-width:3px;
+}
+
 .club-name-long {
     visibility: hidden;
     position: absolute;
 }
 
-.container {
-/*    background-color: var(--backgroundColour);*/
-}
 
 /* class of the main section */
 main {
     /* Provide space for fixed header*/
     padding-top: 60px;
-/*    background-color: var(--backgroundColour);*/
 }
 
 h1 {
     font-size: 1.4rem;
+    margin-top: 1rem;
 }
 
 h2 {
@@ -133,9 +130,23 @@ h2 {
 
 }
 
+@media screen and (min-width: 575px) {
+
+    .home-page-picture figcaption p {
+        font-size: 1.2rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0;
+    }
+}
+
 
 /* Tablet */
 @media screen and (min-width: 768px) {
+
+    .home-page div img {
+        width: 7.5vw;
+        height: 4.92375vw;
+    }
 
     .trip-table {
         font-size: 1rem;
@@ -153,6 +164,17 @@ h2 {
 
 
 @media screen and (min-width: 1060px) {
+
+    h1 {
+        font-size: 1.6rem;
+        margin-top: 0.7rem;
+    }
+
+
+    .home-page div img {
+        width: 5vw;
+        height: 3.2825vw;
+    }
 
     .trip-detail-page,
     .button-footer {

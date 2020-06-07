@@ -11,5 +11,6 @@ namespace HikingClubTripList.Services
         Task<Member> GetLoggedInMemberAsync();
         Task<Member> GetValidMemberAsync(Login login);
         Task<bool> ChangeMemberLoginStateAsync(Member member);
+        Member GetLoggedInMember();
     }
 }

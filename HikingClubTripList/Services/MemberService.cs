@@ -35,5 +35,13 @@ namespace HikingClubTripList.Services
             var updateResult = await _context.SaveChangesAsync();
             return updateResult == 1;
         }
+
+        // Need a non-asychronous version for use in non-asychronous controller methods.
+        public Member GetLoggedInMember()
+        {
+            return _context.Members
+                .FirstOrDefault(m => m.IsLoggedIn);
+        }
+
     }
 }
