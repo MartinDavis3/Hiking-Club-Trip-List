@@ -10,6 +10,7 @@ using HikingClubTripList.Models;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Reflection;
 using HikingClubTripList.Services;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HikingClubTripList.Controllers
 {
@@ -17,11 +18,13 @@ namespace HikingClubTripList.Controllers
     {
         private readonly ITripService _tripService;
         private readonly IMemberService _memberService;
+        private readonly ISignupService _signupService;
 
-        public TripsController(ITripService tripService, IMemberService memberService)
+        public TripsController(ITripService tripService, IMemberService memberService, ISignupService signupService)
         {
             _tripService = tripService;
             _memberService = memberService;
+            _signupService = signupService;
         }
 
         // GET: Trips
@@ -281,14 +284,18 @@ namespace HikingClubTripList.Controllers
 
             Signup signup = new Signup();
             signup.TripID = tripId;
-            signup.MemberID = LoggedInMember().MemberID;
+            var member = await _memberService.GetLoggedInMemberAsync();
+            signup.MemberID = member.MemberID;
+            signup.AsLeader = false;
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(signup);
-                    await _context.SaveChangesAsync();
+                    if( !await _signupService.AddSignupAsync(signup) );
+                    {
+                        // Error ocurred while adding signup.
+                    }
                 }
             }
             catch (DbUpdateException)
@@ -303,21 +310,24 @@ namespace HikingClubTripList.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> WithdrawFromTrip(int tripID)
         {
-            int memberID = LoggedInMember().MemberID;
+            var member = await _memberService.GetLoggedInMemberAsync();
 
             try
             {
-                if (ModelState.IsValid)
+                if ( member == null )
                 {
-                    var signup = await _context.Signups
-                        .FirstOrDefaultAsync(s => s.TripID == tripID && s.MemberID == memberID);
+                    int memberID = member.MemberID;
+                    var signup = await _signupService.GetSignupAsync(tripID, memberID);
+
                     if (signup == null)
                     {
                         ModelState.AddModelError("", "Failed to withdraw [signup not found].");
                     }
-                    _context.Signups.Remove(signup);
-                    await _context.SaveChangesAsync();
-                }
+                    if (!await _signupService.RemoveSignupAsync(signup))
+                    {
+                        // Error ocurred removing signup
+                    }
+               }
             }
             catch (DbUpdateException)
             {
@@ -328,11 +338,13 @@ namespace HikingClubTripList.Controllers
 
         // This is called directly by trip CREATE method.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up as leader.
-        private void CreateLeaderSignup(int tripID)
+        private async Task<IActionResult> CreateLeaderSignup(int tripID)
         {
             Signup leaderSignup = new Signup();
 
-            leaderSignup.MemberID = LoggedInMember().MemberID;
+            var member = await _memberService.GetLoggedInMemberAsync();
+
+            leaderSignup.MemberID = member.MemberID;
             leaderSignup.TripID = tripID;
             leaderSignup.AsLeader = true;
 
@@ -340,8 +352,10 @@ namespace HikingClubTripList.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(leaderSignup);
-                    _context.SaveChanges();
+                    if (!await _signupService.AddSignupAsync(leaderSignup)) ;
+                    {
+                        // Error ocurred while adding signup.
+                    }
                 }
             }
             catch (DbUpdateException)
@@ -352,12 +366,9 @@ namespace HikingClubTripList.Controllers
 
         // This is called directly by trip DELETE method.
         // Only the trip ID is passed in, all the associated signups are found and then deleted.
-        private void DeleteAllTripAssociatedSignups(int tripID)
+        private async Task<IActionResult> DeleteAllTripAssociatedSignups(int tripID)
         {
-            var signups = _context.Signups
-                .Where(s => s.TripID == tripID)
-                .AsNoTracking()
-                .ToList();
+            var signups = _signupService.GetAllSignupsForTripAsync(tripID);
             try
             {
                 if (signups == null)
@@ -366,21 +377,13 @@ namespace HikingClubTripList.Controllers
                 }
                 foreach (var s in signups)
                 {
-                    _context.Signups.Remove(s);
+                    bool removeResult = _signupService.RemoveSignupAsync(s);
                 }
-                _context.SaveChanges();
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Failed to remove signup(s). Please try again");
             }
-        }
-
-        private Member LoggedInMember()
-        {
-            var member = _context.Members
-                .FirstOrDefault(m => m.IsLoggedIn);
-            return member;
         }
 
     }
