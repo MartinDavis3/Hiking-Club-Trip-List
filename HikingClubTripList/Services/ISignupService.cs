@@ -9,7 +9,7 @@ namespace HikingClubTripList.Services
     public interface ISignupService
     {
         Task<bool> AddSignupAsync(Signup signup);
-        Task<List<Signup>> GetAllSignupsForTripAsync(int tripID);
+        Task<Signup> GetTripSignupAsync(int tripID);
         Task<Signup> GetSignupAsync(int tripID, int memberID);
         Task<bool> RemoveSignupAsync(Signup signup);
     }

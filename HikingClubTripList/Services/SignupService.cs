@@ -24,12 +24,10 @@ namespace HikingClubTripList.Services
             return addResult == 1;
         }
 
-        public async Task<List<Signup>> GetAllSignupsForTripAsync(int tripID)
+        public async Task<Signup> GetTripSignupAsync(int tripID)
         {
             return await _context.Signups
-                .Where(s => s.TripID == tripID)
-                .AsNoTracking()
-                .ToListAsync();
+                .FirstOrDefaultAsync(s => s.TripID == tripID);
         }
 
         public async Task<Signup> GetSignupAsync(int tripID, int memberID)

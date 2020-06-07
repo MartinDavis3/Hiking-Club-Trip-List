@@ -277,7 +277,6 @@ namespace HikingClubTripList.Controllers
             {
                 return NotFound();
             }
-
             return View(trip);
         }
 
@@ -291,6 +290,22 @@ namespace HikingClubTripList.Controllers
                 // Error ocurred during delete.
                 ViewData["ErrorMessage"] = "An error ocurred trying to delete the trip";
             }
+
+            // Delete signups.
+            var signup = await _signupService.GetTripSignupAsync(id);
+            try
+            {
+                while (signup != null)
+                {
+                    await _signupService.RemoveSignupAsync(signup);
+                    signup = await _signupService.GetTripSignupAsync(id);
+                } 
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Failed to remove signup(s). Please try again");
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
