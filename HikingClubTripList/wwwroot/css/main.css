@@ -154,11 +154,11 @@ dd {
     max-width: 500px;
 }
 
+
 .button-footer {
     max-width: 500px;
     margin-top: 2rem;
 }
-
 
 @media screen and (min-width: 400px) {
     /* Fix the button width */
@@ -333,7 +333,10 @@ dd {
         grid-row: 3;
         grid-column: 1 / span 2;
     }
-
+    
+    .trip-participant {
+        line-height: 1.8rem
+    }
 }
 
 
