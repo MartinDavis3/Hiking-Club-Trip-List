@@ -3,10 +3,9 @@
 https://www.w3schools.com/css/css_tooltip.asp
 */
 
-/* Tooltip text */
 .tooltiptext {
     visibility: hidden;
-    background-color: var(--textColour);
+    background-color: rgba(52, 57, 28, 0.5);
     color: white;
     font-size: 0.8em;
     text-align: center;
@@ -18,13 +17,13 @@ https://www.w3schools.com/css/css_tooltip.asp
     z-index: 2;
 }
 
-/* Show the tooltip text when you mouse over the tooltip container */
 #member-name:hover + .tooltiptext {
     visibility: visible;
 }
 
 /* Modify position on change from hamburger menu */
 @media screen and (min-width: 576px) {
+
     .tooltiptext {
         top: 10px;
         left: 75%;
@@ -34,25 +33,33 @@ https://www.w3schools.com/css/css_tooltip.asp
 
 /* Continue to need to ajust horizontal position */
 @media screen and (min-width: 750px) {
+
     .tooltiptext {
         left: 68%;
     }
+
 }
 
 @media screen and (min-width: 992px) {
+
     .tooltiptext {
         left: 50%;
     }
+
 }
 
 @media screen and (min-width: 1200px) {
+
     .tooltiptext {
         left: 40%;
     }
+
 }
 
 @media screen and (min-width: 1600px) {
+
     .tooltiptext {
         left: 45%;
     }
+
 }

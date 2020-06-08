@@ -1,21 +1,19 @@
 
 /* Trip Details */
 
-.trip-detail-page,
-.button-footer {
+.trip-detail-page {
     max-width: 500px;
 }
 
-/*
-.trip-details-title-panel {
-    position: fixed;
-    height: 40px;
-    width: 100%;
-    top: 60px;
-    bottom: auto;
-    z-index: 1;
+.trip-detail-page dl,
+.trip-detail-page dd {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
-*/
+
+.button-footer {
+    max-width: 500px;
+}
 
 /* First panel with trip description */
 
@@ -28,11 +26,13 @@
 .trip-date {
     grid-row: 1;
     grid-column: 1;
+    font-weight: bold;
 }
 
 .trip-title {
     grid-row: 1;
     grid-column: 2 / span 2;
+    font-weight: bold;
 }
 
 .trip-level {

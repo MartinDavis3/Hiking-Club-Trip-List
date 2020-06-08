@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HikingClubTripList.Data;
+using HikingClubTripList.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,7 +29,10 @@ namespace HikingClubTripList
             services.AddControllersWithViews();
             services.AddDbContext<ClubContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddMvc();
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<ITripService, TripService>();
+            services.AddScoped<ISignupService, SignupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

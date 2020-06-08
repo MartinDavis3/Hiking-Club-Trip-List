@@ -7,36 +7,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using HikingClubTripList.Models;
 using HikingClubTripList.Data;
+using HikingClubTripList.Services;
 
 namespace HikingClubTripList.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ClubContext _context;
+        private readonly IMemberService _memberService;
 
-        public HomeController(ILogger<HomeController> logger, ClubContext context)
+        public HomeController(ILogger<HomeController> logger, IMemberService memberService)
         {
             _logger = logger;
-            _context = context;
+            _memberService = memberService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var loggedInMember = LoggedInMember();
-            if (loggedInMember == null)
-            {
-                ViewData["LoggedInMemberName"] = "Log In";
-            }
-            else
-            {
-                ViewData["LoggedInMemberName"] = loggedInMember.Name;
-            }
+            var loggedInMember = await _memberService.GetLoggedInMemberAsync();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             return View();
         }
 
         public IActionResult Privacy()
         {
+            var loggedInMember = _memberService.GetLoggedInMember();
+            PlaceLoggedInNameInViewData(loggedInMember);
+
             return View();
         }
 
@@ -46,11 +44,19 @@ namespace HikingClubTripList.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private Member LoggedInMember()
+        // Routine is repeated from trip controller rather than putting it in a service.
+        // Chose to prioritise principle of separation of concerns over DRY.
+        private void PlaceLoggedInNameInViewData(Member loggedInMember)
         {
-            var member = _context.Members
-                .FirstOrDefault(m => m.IsLoggedIn);
-            return member;
+            if (loggedInMember == null)
+            {
+                ViewData["LoggedInMemberName"] = "Log In";
+            }
+            else
+            {
+                ViewData["LoggedInMemberName"] = loggedInMember.Name;
+            }
         }
+
     }
 }

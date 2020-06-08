@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace HikingClubTripList.Models
 {
-    //Link between Trip and Member tables, data will not be entered directly by the user.
+    //Link between Trip and Member tables.
+    // All CRUD is handled programatically.
     public class Signup
     {
         public int SignupID { get; set; }
