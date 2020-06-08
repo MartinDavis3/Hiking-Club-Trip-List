@@ -160,7 +160,6 @@ dd {
 }
 
 
-
 @media screen and (min-width: 400px) {
     /* Fix the button width */
     /* Stop stretching buttons with grid cell width */
@@ -201,7 +200,8 @@ dd {
         height: 19.7px;
     }
 
-    /* Switch visibility from short form of level to long form */
+    /* Switch visibility from short form of
+       level and date to long form */
     .short-form {
         visibility: hidden;
         position: absolute;
@@ -246,7 +246,6 @@ dd {
     .trip-table {
         font-size: 1rem;
     }
-
 
     .button {
         width: 92px;

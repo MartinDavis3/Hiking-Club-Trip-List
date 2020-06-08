@@ -22,6 +22,7 @@ namespace HikingClubTripList.Services
         return await _context.Trips
                 .Include(t => t.Signups)
                     .ThenInclude(s => s.Member)
+                .OrderBy(t => t.Date)
                 .AsNoTracking()
                 .ToListAsync();
         }
