@@ -22,8 +22,6 @@ namespace HikingClubTripList.Controllers
         }
 
         // Routines handling login and logout.
-        // They always return a ViewData["LoggedInMemberName"] value,
-        // Which is used to dispay username (or Log In) in the nav bar.
 
         // This is the target of the Login nav tab.
         public async Task<IActionResult> Login()

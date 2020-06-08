@@ -5,6 +5,11 @@
 @import 'trip-details.css';
 @import 'buttons-and-links.css';
 
+/* Note: The W3C CSS Validation service:
+*  https://jigsaw.w3.org/css-validator/#validate_by_input
+*  Gives errors on all the constants (New CSS3 feature),
+*  but they work fine in practice.
+*/
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,29 +19,29 @@ body {
     margin-left: auto;
     margin-right: auto;
     /* Colour variables to maintain standardised colouring*/
-    --backgroundColour: #e0e3bf; /* lightish green */
-    --textColour: #34391c; /* very dark green */
-    --viewLinkColour: #0060B7; /* blue */
-    --actionLinkColour: #0060B7; /* blue */
-    --deleteColour: #AA406A; /* dark pink */
-    --editColour: #46708E; /* blue grey */
-    --saveColour: #887402; /* dark yellow */
-    --withdrawColour: #A66400; /* dark orange */
-    --signupColour: #586F00; /* dark green */
-    --createColour: #80226c; /* purple */
-    --finalDeleteColour: #c82333; /* Default red*/
-    --buttonTextColour: #FFFFFF; /* white */
+    --background-colour: #e0e3bf; /* lightish green */
+    --text-colour: #34391c; /* very dark green */
+    --view-link-colour: #0060B7; /* blue */
+    --action-link-colour: #0060B7; /* blue */
+    --delete-colour: #AA406A; /* dark pink */
+    --edit-colour: #46708E; /* blue grey */
+    --save-colour: #887402; /* dark yellow */
+    --withdraw-colour: #A66400; /* dark orange */
+    --signup-colour: #586F00; /* dark green */
+    --create-colour: #80226c; /* purple */
+    --final-delete-colour: #c82333; /* Default red*/
+    --button-text-colour: #FFFFFF; /* white */
     /* Outlines */
-    --withdrawOutline: #FFC01A;
-    --signupOutline: #ADD900;
-    --deleteOutline: #FF6FA8;
-    --editOutline: #2FA7FF;
-    --saveOutline: #F9D300;
-    --createOutline: #FF20CD;
-    --finalDeleteOutline: #FF707E;
+    --withdraw-outline: #FFC01A;
+    --signup-outline: #ADD900;
+    --delete-outline: #FF6FA8;
+    --edit-outline: #2FA7FF;
+    --save-outline: #F9D300;
+    --create-outline: #FF20CD;
+    --final-delete-outline: #FF707E;
     /* Set colours for whole app*/
-    background-color: var(--backgroundColour);
-    color: var(--textColour);
+    background-color: var(--background-colour);
+    color: var(--text-colour);
 }
 
 header {
@@ -54,22 +59,27 @@ header {
     background-color: white;
 }
 
-.navbar-brand {
-    font-size: 1.0rem;
+.navbar,
+.footer {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .navbar-brand img {
-    width: 20px;
+    width: 25px;
+    height: 16.41px;
+}
+
+.navbar-brand {
+    font-size: 1.2rem;
+}
+
+.nav-link {
+    font-size: 1rem;
 }
 
 .nav-link:hover {
     text-decoration: underline;
-}
-
-.link-btn:focus,
-.link-btn:active {
-    border-top-color: Var(--backgroundColour);
-    border-top-width:3px;
 }
 
 .club-name-long {
@@ -77,21 +87,51 @@ header {
     position: absolute;
 }
 
+.long-form {
+    visibility: hidden;
+    position: absolute;
+}
 
-/* class of the main section */
 main {
     /* Provide space for fixed header*/
     padding-top: 60px;
 }
 
 h1 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin-top: 1rem;
+    font-weight: 600;
 }
 
 h2 {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     margin-top: 1.5rem;
+    font-weight: 600;
+}
+
+p {
+    line-height: 1.2rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+li {
+    line-height: 1.2rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+ul {
+    margin-top: -0.5rem;
+    margin-left: 2rem;
+    padding-left: 0
+}
+
+dt,
+dd {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5rem;
 }
 
 /* Trip List */
@@ -102,23 +142,27 @@ h2 {
 
 .trip-table th,
 .trip-table td {
-    border-bottom-color: var(--textColour);
+    border-bottom-color: var(--text-colour);
     padding-top: 0.75em;
     padding-bottom: 0.75em;
     padding-left: 0.5em;
     padding-right: 0.5em;
-    border-bottom: 1px solid var(--textColour);
+    border-bottom: 1px solid var(--text-colour);
 }
 
-.button-footer,
 .trip-detail-page {
     max-width: 500px;
 }
 
+.button-footer {
+    max-width: 500px;
+    margin-top: 2rem;
+}
+
+
 
 @media screen and (min-width: 400px) {
     /* Fix the button width */
-
     /* Stop stretching buttons with grid cell width */
     .button-footer {
         justify-items: center;
@@ -130,18 +174,69 @@ h2 {
 
 }
 
-@media screen and (min-width: 575px) {
+/* Breakpoint from hamburger menu */
+@media screen and (min-width: 576px) {
 
     .home-page-picture figcaption p {
         font-size: 1.2rem;
         margin-top: 0.6rem;
         margin-bottom: 0;
     }
-}
 
+    .trip-table {
+        font-size: 1rem;
+    }
+
+}
 
 /* Tablet */
 @media screen and (min-width: 768px) {
+
+    body {
+        font-size: 16px;
+    }
+
+    .navbar-brand img {
+        width: 30px;
+        height: 19.7px;
+    }
+
+    /* Switch visibility from short form of level to long form */
+    .short-form {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    .long-form {
+        visibility: visible;
+        position: static;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+        margin-top: 1rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+        margin-top: 1.5rem;
+    }
+
+    p {
+        line-height: 1.4rem;
+        margin-top: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    li {
+        line-height: 1.4rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    ul {
+        margin-top: -0.5rem;
+    }
 
     .home-page div img {
         width: 7.5vw;
@@ -152,24 +247,58 @@ h2 {
         font-size: 1rem;
     }
 
-    body {
-        font-size: 16px;
-    }
 
     .button {
         width: 92px;
     }
 
+    .club-name-long {
+        visibility: visible;
+        position:static;
+    }
 }
-
 
 @media screen and (min-width: 1060px) {
 
-    h1 {
-        font-size: 1.6rem;
-        margin-top: 0.7rem;
+    body {
+        font-size: 18px;
     }
 
+    .navbar-brand {
+        font-size: 1.3rem;
+    }
+
+    .nav-link {
+        font-size: 1.2rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+        margin-top: 1.6rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+        margin-top: 1.4rem;
+    }
+
+    p {
+        line-height: 1.4rem;
+        margin-top: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    li {
+        line-height: 1.4rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    ul {
+        margin-top: -0.5rem;
+        margin-left: 2rem;
+        padding-left: 0
+    }
 
     .home-page div img {
         width: 5vw;
@@ -205,6 +334,7 @@ h2 {
         grid-row: 3;
         grid-column: 1 / span 2;
     }
+
 }
 
 

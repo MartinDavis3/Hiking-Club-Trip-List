@@ -8,10 +8,12 @@ namespace HikingClubTripList.Models
 {
     public class Member
     {
+        // The model is for internal use only.
+        // Data is entered directly to the database by administrator.
+        // No user input is received.
         public int MemberID { get; set; }
 
         [StringLength(12, MinimumLength = 5 ) ]
-        // Must not start with a digit
         [Required]
         public string Username { get; set; }
 
@@ -20,7 +22,6 @@ namespace HikingClubTripList.Models
         public string Password { get; set; }
 
         [StringLength(30, MinimumLength = 5 ) ]
-        // Must start with capital letter and have no digits
         [Required]
         public string Name { get; set; }
 

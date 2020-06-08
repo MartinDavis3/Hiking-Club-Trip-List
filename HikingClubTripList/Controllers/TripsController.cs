@@ -91,13 +91,13 @@ namespace HikingClubTripList.Controllers
                 return NotFound();
             }
 
-            //Business logic.
+            //Get leader and list of participants from the trip signups.
+            //Also determine if logged in member is a leader or participant (or neither).
             string leaderName = "Not Found";
             bool loggedInMemberIsLeader = false;
             bool loggedInMemberIsParticipant = false;
             List<string> participantNames = new List<string>();
-            //Get leader and list of participants from the trip signups.
-            //Also determine if logged in member is a leader or participant (or neither).
+
             foreach (var signup in trip.Signups)
             {
                 if (signup.AsLeader)
@@ -178,7 +178,6 @@ namespace HikingClubTripList.Controllers
                     // Add trip to database and test result of action
                     if( !await _tripService.AddTripAsync(trip))
                     {
-                        // Error ocurred during add.
                         ViewData["ErrorMessage"] = "An error ocurred trying to add the trip";
                     }
 
@@ -197,7 +196,6 @@ namespace HikingClubTripList.Controllers
                         {
                             if (!await _signupService.AddSignupAsync(leaderSignup))
                             {
-                                // Error ocurred while adding signup.
                                 ViewData["ErrorMessage"] = "An error ocurred trying to add the leader signup for this trip";
                             }
                         }
@@ -254,7 +252,6 @@ namespace HikingClubTripList.Controllers
                 {
                     if (!await _tripService.UpdateTripAsync(trip) )
                     {
-                        // Error ocurred updating trip.
                         ViewData["ErrorMessage"] = "An error ocurred trying to update the trip";
                     }
                 }
@@ -304,7 +301,6 @@ namespace HikingClubTripList.Controllers
 
             if (!await _tripService.RemoveTripAsync(id))
             {
-                // Error ocurred during delete.
                 ViewData["ErrorMessage"] = "An error ocurred trying to delete the trip";
             }
 
@@ -328,7 +324,7 @@ namespace HikingClubTripList.Controllers
 
         // Methods to handle trip Signups.
 
-        // This is called directly by the signup button from the trip detail view.
+        // This is called by the signup button from the trip detail view.
         // Only the trip ID is passed in, the logged in member, found from the database, is signed up.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -347,7 +343,6 @@ namespace HikingClubTripList.Controllers
                 {
                     if( !await _signupService.AddSignupAsync(signup) )
                     {
-                        // Error ocurred while adding signup.
                         ViewData["ErrorMessage"] = "An error ocurred trying to add the signup";
                     }
                 }
@@ -359,7 +354,7 @@ namespace HikingClubTripList.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // This is called directly by the withdrawl button from the trip detail view.
+        // This is called by the withdrawl button from the trip detail view.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> WithdrawFromTrip(int tripID)
@@ -380,6 +375,7 @@ namespace HikingClubTripList.Controllers
                     if (!await _signupService.RemoveSignupAsync(signup))
                     {
                         // Error ocurred removing signup
+                        ModelState.AddModelError("", "Failed to withdraw [failed to remove signup].");
                     }
                 }
             }

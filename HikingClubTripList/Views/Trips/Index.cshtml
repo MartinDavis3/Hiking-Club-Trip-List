@@ -36,17 +36,17 @@
 {
         <tr>
             <td>
-                @{string sd = Convert.ToString(item.Date).Substring(0, 6);
-                }@sd
-            </td>
+                @{string sd = item.Date.ToString("dd-MMM");
+                }<span class="short-form" role="presentation">@sd</span><span class="long-form">@(item.Date.ToString("dd-MMM-yyyy"))</span>
+</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
                 @{string abrv = Convert.ToString(item.Level).Substring(0, 3) + ".";
-                }@abrv
+                }<span class="short-form" role="presentation">@abrv</span><span class="long-form">@item.Level</span>
             </td>
-          <td>
+            <td>
                 @(ViewBag.LeadersList[i])
             </td>
             <td>
