@@ -1,5 +1,5 @@
 
-![Club Logo|588x386,50%](/HikingClubTripList/wwwroot/img/logo.png)
+<img src="/HikingClubTripList/wwwroot/img/logo.png" width=294 height=193 title="Wandering Heights Hiking Club Logo" alt="Logo depicting sylised mountains">
 
 # Wandering Heights Hiking Club - Trip Pages
 
