@@ -85,6 +85,7 @@ To be able to see the trip list, you must log in on the Login page. A series of 
 The Hiking Trip List shows a summary of all the trips. For each trip the date, title, level, leader name and the spaces remaining on that trip are shown. If there are no spaces remaining the trip is marked full.
 1.	To add a new trip, use the link: Add a New Trip at the top of that page. 
 2.	To see the details of each trip, use the link: Details to the right of the specific trip listing.
+
 The Trip Details page shows the information which will help you decide if you would like to participate in the trip. This is: date, title, level, distance, elevation gain, a description of the hike, the maximum number of participants, the leader name and the names of the currently signed up participants.
 
 The buttons below the trip description allow you to Delete, Edit, Withdraw or Sign up for a trip. There is also a link at the right: Back to List. The buttons you actually see will depend on the permissions / possibilities you have for this particular trip:
@@ -127,7 +128,11 @@ Use the following test data, which is in the form:
 Field: “valid data”; “Invalid data 1”, “Invalid data 2”, etc.
 
 Date: “30-Apr-20”; “31-Apr-21”
-Title: “Turbine”; “Here”,” Turbine”, “Turbine “, “Turbine.”, “turbine”
+Title: “Turbine”; “Here”,” Turbine”, “Turbine “, “Turbine.”, “turbine”, “Cougar Canyons Spring Kick-Off”
+Distance: “12”; “long”,“-1”,“101”
+Elevation Gain: “500”; “high”, “-5001”, “5001”
+Description: “Very nice.”;“ Very nice.”, “Very nice. “, “very nice.”, “A nice hike at elevation. Not too long but steep. It is worth the effort though, with great views of the Saskatchewan glacier. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra metus nec felis varius suscipit. Pellentesque in facilisis dui. Quisque magna arcu, imperdiet ut nunc at, fermentum interdum ante. Nullam sed posuere dolor. Sed quis nibh quis lacus porta ultricies imperdiet nec felis. Suspendisse potenti. Nulla nunc leo, mattis at volutpat non, ornare sed nibh. Vestibulum commodo commodo velit, vitae rutrum nibh fringilla id. Vestibulum in urna libero. Aenean aliquam euismod lacus ut fermentum. Integer convallis tincidunt nisi in cursus. Proin eu vestibulum mi, in pellentesque orci. Nullam blandit dapibus turpis quis finibus. Praesent eget arcu tempor, fauci.”
+Maximum Participants: “5”; “5.5”, “1”, “13”
 
 For each entry form.
 1.	Enter valid values in all fields and check there are no error messages and data can be submitted.
