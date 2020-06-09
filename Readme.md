@@ -128,10 +128,15 @@ Use the following test data, which is in the form:
 Field: “valid data”; “Invalid data 1”, “Invalid data 2”, etc.
 
 Date: “30-Apr-20”; “31-Apr-21”
+
 Title: “Turbine”; “Here”,” Turbine”, “Turbine “, “Turbine.”, “turbine”, “Cougar Canyons Spring Kick-Off”
+
 Distance: “12”; “long”,“-1”,“101”
+
 Elevation Gain: “500”; “high”, “-5001”, “5001”
+
 Description: “Very nice.”;“ Very nice.”, “Very nice. “, “very nice.”, “A nice hike at elevation. Not too long but steep. It is worth the effort though, with great views of the Saskatchewan glacier. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra metus nec felis varius suscipit. Pellentesque in facilisis dui. Quisque magna arcu, imperdiet ut nunc at, fermentum interdum ante. Nullam sed posuere dolor. Sed quis nibh quis lacus porta ultricies imperdiet nec felis. Suspendisse potenti. Nulla nunc leo, mattis at volutpat non, ornare sed nibh. Vestibulum commodo commodo velit, vitae rutrum nibh fringilla id. Vestibulum in urna libero. Aenean aliquam euismod lacus ut fermentum. Integer convallis tincidunt nisi in cursus. Proin eu vestibulum mi, in pellentesque orci. Nullam blandit dapibus turpis quis finibus. Praesent eget arcu tempor, fauci.”
+
 Maximum Participants: “5”; “5.5”, “1”, “13”
 
 For each entry form.
