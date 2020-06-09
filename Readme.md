@@ -113,6 +113,49 @@ The delete button will let you remove a trip. You will be asked for confirmation
 ## Log Out
 Hovering on the name of the currently logged in member in the navigation bar will show a Log Out tooltip (Ref 3). Clicking on the name will then perform the log out.
 
+# Testing Instructions and Test Cases
+
+## Test Login
+1.	Check an invalid user cannot log in even with the correct password of another user.
+2.	Check a valid user with the wrong password cannot log in.
+3.	Check user can be properly logged out.
+
+## Test user input fields
+
+Use the following test data, which is in the form:
+
+Field: “valid data”; “Invalid data 1”, “Invalid data 2”, etc.
+
+Date: “30-Apr-20”; “31-Apr-21”
+Title: “Turbine”; “Here”,” Turbine”, “Turbine “, “Turbine.”, “turbine”
+
+For each entry form.
+1.	Enter valid values in all fields and check there are no error messages and data can be submitted.
+2.	For each value field in turn:
+a.	Enter one of each type of incorrect value in turn.
+b.	Check that a meaningful error message is shown in each case.
+c.	Check that the form cannot be submitted.
+d.	Return the field to a valid value
+e.	Continue to next field
+3.	In developer tools, disable running of scripts.
+4.	For each value field in turn:
+a.	Enter one of each type of incorrect value in turn.
+b.	Submit the form.
+c.	Check that a meaningful error is returned and no records were changed in the database.
+d.	Continue to the next field.
+
+## Test Trip Controller
+1.	Check Index() returns all data items in correct order.
+2.	Check Create correctly adds data to the database and then shows full list with added item.
+3.	Check Edit:
+a.	Correctly modifies the requested item and displays the modified item.
+b.	Edit the URL directly so there is no id and check there is an appropriate error message and no database modification.
+c.	Edit the URL directly to an invalid id and check there is an appropriate error message and no database modification.
+4.	Check Delete:
+a.	Correctly deletes the requested item and returns the full list without the deleted item.
+b.	Edit the URL directly so there is no id and check there is an appropriate error message and no database modification.
+c.	Edit the URL directly to an invalid id and check there is an appropriate error message and no database modification. 
+
 # Link to Trello Board
 https://trello.com/b/LEcsNI0B/capstone-project
 
