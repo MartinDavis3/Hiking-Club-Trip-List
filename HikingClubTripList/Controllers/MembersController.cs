@@ -74,9 +74,9 @@ namespace HikingClubTripList.Controllers
                 member.IsLoggedIn = false;
                 if (!await _memberService.ChangeMemberLoginStateAsync(member))
                 {
-                    ViewData["ErrorMessage"] = "An error ocurred trying to logout";
+                    ViewData["ErrorMessage"] = "An error ocurred trying to logout. Please try again.";
                     ViewData["LoggedInMemberName"] = member.Name;
-                    return View("Views/Home/Index.cshtml");
+                    return View("Views/Shared/AppError.cshtml");
                 }
             }
             ViewData["LoggedInMemberName"] = "Log In";

@@ -20,6 +20,8 @@
                 @Html.DisplayFor(model => model.Trip.Distance) km
             </dd>
             <dd class="trip-elevation-gain">
+                @if (Model.Trip.ElevationGain > 0)
+                {<span>+</span>}
                 @Html.DisplayFor(model => model.Trip.ElevationGain) m
             </dd>
             <dd class="trip-description">

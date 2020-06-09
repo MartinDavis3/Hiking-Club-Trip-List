@@ -20,6 +20,8 @@ namespace HikingClubTripList.Controllers
         private readonly IMemberService _memberService;
         private readonly ISignupService _signupService;
 
+        private readonly string appErrorPath = "Views/Shared/AppError.cshtml";
+
         public TripsController(ITripService tripService, IMemberService memberService, ISignupService signupService)
         {
             _tripService = tripService;
@@ -80,16 +82,28 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             PlaceLoggedInNameInViewData(loggedInMember);
 
+            Trip trip;
+            // Set the error message, ready if something goes wrong.
+            ViewData["ErrorMessage"] = "An error ocurred trying to get the trip details. Please try again.";
             if (id == null)
             {
-                return NotFound();
+                return View(appErrorPath);
             }
             int tripID = id ?? 0;
-            var trip = await _tripService.GetTripDetailsAsync(tripID);
-            if (trip == null)
+            try
             {
-                return NotFound();
+                trip = await _tripService.GetTripDetailsAsync(tripID);
+                if (trip == null)
+                {
+                    return View(appErrorPath);
+                }
             }
+            catch
+            {
+                return View(appErrorPath);
+            }
+            // Clear error message
+            ViewData["ErrorMessage"] = "";
 
             //Get leader and list of participants from the trip signups.
             //Also determine if logged in member is a leader or participant (or neither).
@@ -171,45 +185,49 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             PlaceLoggedInNameInViewData(loggedInMember);
 
-            try
+            // Set error message ready if something goes wrong.
+            ViewData["ErrorMessage"] = "An error ocurred trying to add the trip. Please try again.";
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                // Add trip to database and test result of action
+                try
                 {
-                    // Add trip to database and test result of action
-                    if( !await _tripService.AddTripAsync(trip))
+                    if (!await _tripService.AddTripAsync(trip))
                     {
-                        ViewData["ErrorMessage"] = "An error ocurred trying to add the trip";
+                        return View(appErrorPath);
                     }
-
-                    // Add signup to this trip for logged in user as leader
-                    Signup leaderSignup = new Signup();
-
-                    var member = await _memberService.GetLoggedInMemberAsync();
-
-                    leaderSignup.MemberID = member.MemberID;
-                    leaderSignup.TripID = trip.TripID;
-                    leaderSignup.AsLeader = true;
-
-                    try
-                    {
-                        if (ModelState.IsValid)
-                        {
-                            if (!await _signupService.AddSignupAsync(leaderSignup))
-                            {
-                                ViewData["ErrorMessage"] = "An error ocurred trying to add the leader signup for this trip";
-                            }
-                        }
-                    }
-                    catch (DbUpdateException)
-                    {
-                        ModelState.AddModelError("", "Failed to create a sign up. Please try again");
-                    }
-                    return RedirectToAction(nameof(Index));
                 }
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "Unable to save changes. Please try again");
+                catch (DbUpdateConcurrencyException)
+                {
+                    return View(appErrorPath);
+
+                }
+
+                // Add signup to this trip for logged in user as leader
+                Signup leaderSignup = new Signup
+                {
+                    MemberID = loggedInMember.MemberID,
+                    TripID = trip.TripID,
+                    AsLeader = true
+                };
+
+                // Set error message ready if something goes wrong.
+                ViewData["ErrorMessage"] = "An error ocurred trying to add the leader signup for this trip. Please check in the trip list if the trip has been created without a leader. If so, please delete the trip and try creating it again.";
+
+                try
+                {
+                    if (!await _signupService.AddSignupAsync(leaderSignup))
+                    {
+                        return View(appErrorPath);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return View(appErrorPath);
+                }
+                ViewData["ErrorMessage"] = "";
+                return RedirectToAction(nameof(Index));
             }
             return View(trip);
         }
@@ -220,16 +238,26 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             PlaceLoggedInNameInViewData(loggedInMember);
 
+            Trip trip;
+            ViewData["ErrorMessage"] = "An error ocurred trying to get the trip to edit. Please try again.";
             if (id == null)
             {
-                return NotFound();
+                return View(appErrorPath);
             }
             int tripID = id ?? 0;
-            var trip = await _tripService.GetTripOnlyAsync(tripID);
-            if (trip == null)
+            try
             {
-                return NotFound();
+                trip = await _tripService.GetTripOnlyAsync(tripID);
+                if (trip == null)
+                {
+                    return View(appErrorPath);
+                }
             }
+            catch
+            {
+                return View(appErrorPath);
+            }
+            ViewData["ErrorMessage"] = "";
             return View(trip);
         }
 
@@ -241,31 +269,32 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             PlaceLoggedInNameInViewData(loggedInMember);
 
+            // Set error message ready if something goes wrong.
+            ViewData["ErrorMessage"] = "An error ocurred trying to update the trip. Please try again.";
+
             if (id != trip.TripID)
             {
-                return NotFound();
+                return View(appErrorPath);
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (!await _tripService.UpdateTripAsync(trip) )
-                    {
-                        ViewData["ErrorMessage"] = "An error ocurred trying to update the trip";
-                    }
+                    await _tripService.UpdateTripAsync(trip);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!await _tripService.TripExistsAsync(trip.TripID))
                     {
-                        return NotFound();
+                        return View(appErrorPath);
                     }
                     else
                     {
                         throw;
                     }
                 }
+                ViewData["ErrorMessage"] = "";
                 return RedirectToAction(nameof(Index));
             }
             return View(trip);
@@ -277,17 +306,27 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             PlaceLoggedInNameInViewData(loggedInMember);
 
+            Trip trip;
+            ViewData["ErrorMessage"] = "An error ocurred trying to get the trip to delete. Plaese try again.";
             if (id == null)
             {
-                return NotFound();
+                return View(appErrorPath);
             }
             int tripID = id ?? 0;
-            var trip = await _tripService.GetTripForDeleteAsync(tripID);
-
-            if (trip == null)
+            try
             {
-                return NotFound();
+                trip = await _tripService.GetTripForDeleteAsync(tripID);
+                if (trip == null)
+                {
+                    return View(appErrorPath);
+                }
             }
+            catch
+            {
+                return View(appErrorPath);
+
+            }
+            ViewData["ErrorMessage"] = "";
             return View(trip);
         }
 
@@ -299,15 +338,25 @@ namespace HikingClubTripList.Controllers
             var loggedInMember = await _memberService.GetLoggedInMemberAsync();
             PlaceLoggedInNameInViewData(loggedInMember);
 
-            if (!await _tripService.RemoveTripAsync(id))
+            // Set error message ready if something goes wrong.
+            ViewData["ErrorMessage"] = "An error ocurred trying to delete the trip. Please try again.";
+
+            try
             {
-                ViewData["ErrorMessage"] = "An error ocurred trying to delete the trip";
+                if (!await _tripService.RemoveTripAsync(id))
+                {
+                    return View(appErrorPath);
+                }
+            }
+            catch (DbUpdateException)
+            {
+                return View(appErrorPath);
             }
 
             // Delete signups.
-            var signup = await _signupService.GetTripSignupAsync(id);
             try
             {
+                var signup = await _signupService.GetTripSignupAsync(id);
                 while (signup != null)
                 {
                     await _signupService.RemoveSignupAsync(signup);
@@ -316,9 +365,10 @@ namespace HikingClubTripList.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Failed to remove signup(s). Please try again");
+                return View(appErrorPath);
             }
 
+            ViewData["ErrorMessage"] = "";
             return RedirectToAction(nameof(Index));
         }
 
@@ -330,12 +380,17 @@ namespace HikingClubTripList.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUpForTrip(int tripId)
         {
-
-            Signup signup = new Signup();
-            signup.TripID = tripId;
             var member = await _memberService.GetLoggedInMemberAsync();
-            signup.MemberID = member.MemberID;
-            signup.AsLeader = false;
+
+            // Set error message ready if something goes wrong.
+            ViewData["ErrorMessage"] = "An error ocurred trying to add the signup. Please try again.";
+
+            Signup signup = new Signup
+            {
+                TripID = tripId,
+                MemberID = member.MemberID,
+                AsLeader = false
+            };
 
             try
             {
@@ -343,14 +398,15 @@ namespace HikingClubTripList.Controllers
                 {
                     if( !await _signupService.AddSignupAsync(signup) )
                     {
-                        ViewData["ErrorMessage"] = "An error ocurred trying to add the signup";
+                        return View(appErrorPath);
                     }
                 }
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Failed to sign up. Please try again.");
+                return View(appErrorPath);
             }
+            ViewData["ErrorMessage"] = "";
             return RedirectToAction(nameof(Index));
         }
 
@@ -361,6 +417,9 @@ namespace HikingClubTripList.Controllers
         {
             var member = await _memberService.GetLoggedInMemberAsync();
 
+            // Set error message ready if something goes wrong.
+            ViewData["ErrorMessage"] = "An error ocurred trying to add the signup. Please try again.";
+
             try
             {
                 if ( member != null )
@@ -370,19 +429,19 @@ namespace HikingClubTripList.Controllers
 
                     if (signup == null)
                     {
-                        ModelState.AddModelError("", "Failed to withdraw [signup not found].");
+                        return View(appErrorPath);
                     }
                     if (!await _signupService.RemoveSignupAsync(signup))
                     {
-                        // Error ocurred removing signup
-                        ModelState.AddModelError("", "Failed to withdraw [failed to remove signup].");
+                        return View(appErrorPath);
                     }
                 }
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Failed to withdraw. Please try again.");
+                return View(appErrorPath);
             }
+            ViewData["ErrorMessage"] = "";
             return RedirectToAction(nameof(Index));
         }
 
