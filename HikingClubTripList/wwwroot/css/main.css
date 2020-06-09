@@ -22,7 +22,7 @@ body {
     --background-colour: #e0e3bf; /* lightish green */
     --text-colour: #34391c; /* very dark green */
     --view-link-colour: #0060B7; /* blue */
-    --action-link-colour: #0060B7; /* blue */
+    --action-link-colour: #0060B7; /* blue  Note: option for a different colour.*/
     --delete-colour: #AA406A; /* dark pink */
     --edit-colour: #46708E; /* blue grey */
     --save-colour: #887402; /* dark yellow */
@@ -72,16 +72,19 @@ header {
 
 .navbar-brand {
     font-size: 1.2rem;
+    /* This margin needed to line up with other navbar links */
+    margin-top: -8px;
 }
 
 .nav-link {
-    font-size: 1rem;
+    font-size: 1.0rem;
 }
 
 .nav-link:hover {
     text-decoration: underline;
 }
 
+/* Use short forms for small mobile device*/
 .club-name-long {
     visibility: hidden;
     position: absolute;
@@ -154,11 +157,22 @@ dd {
     max-width: 500px;
 }
 
-
 .button-footer {
     max-width: 500px;
     margin-top: 2rem;
 }
+
+.trip-detail-page {
+    max-width: 500px;
+}
+
+.privacy-page,
+.app-error-page {
+    max-width: 800px;
+}
+
+/* Include buttons etc. initially set in other files because 
+   the media queries do not always work in other files. */
 
 @media screen and (min-width: 400px) {
     /* Fix the button width */
@@ -186,6 +200,10 @@ dd {
         font-size: 1rem;
     }
 
+    /* Need to make this smaller to fit narrow screen (there is no longer a drop-down) */
+    .navbar-brand {
+        font-size: 1.0rem;
+    }
 }
 
 /* Tablet */
@@ -251,6 +269,7 @@ dd {
         width: 92px;
     }
 
+    /* Include extra part of club-name */       
     .club-name-long {
         visibility: visible;
         position:static;

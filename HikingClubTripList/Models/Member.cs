@@ -21,7 +21,7 @@ namespace HikingClubTripList.Models
         [Required]
         public string Password { get; set; }
 
-        [StringLength(30, MinimumLength = 5 ) ]
+        [StringLength(22, MinimumLength = 5 ) ]
         [Required]
         public string Name { get; set; }
 

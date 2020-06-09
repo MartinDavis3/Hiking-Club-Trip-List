@@ -26,6 +26,7 @@
 
 .link-back-to-list {
     grid-column: 5;
+    align-self: center;
 }
 
 /* Style the buttons (and associated forms) */
@@ -40,8 +41,8 @@
 
 /* Note: exact values required to centre text vertically */
 .link-btn {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 10px;
+    padding-bottom: 13px;
 }
 
 /* Stop normal hover etc. of link */
@@ -197,3 +198,20 @@
     margin-top: 2rem;
 }
 
+/* Login (using same colour as action link and outline as edit) */
+.btn-login {
+    background-color: var(--action-link-colour);
+    border-color: var(--action-link-colour);
+    width: 74px;
+    height: 40px;
+    margin-top: 40px;
+}
+
+    .btn-login:hover {
+        box-shadow: 0 0 2px 2px var(--edit-outline);
+    }
+
+    .btn-login:focus,
+    .btn-login:active {
+        box-shadow: 0 0 4px 4px var(--edit-outline);
+    }

@@ -21,6 +21,10 @@ namespace HikingClubTripList.Controllers
             _memberService = memberService;
         }
 
+        // The ASP.NET Core MVC with EF Core - tutorial series (https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/?view=aspnetcore-3.1)
+        // was used to help setup the initial code and database structure for this App. This was then extensively modified to fullfil the
+        // particular business model required for the project application.
+
         // Routines handling login and logout.
 
         // This is the target of the Login nav tab.
