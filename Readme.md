@@ -1,5 +1,5 @@
 
-![Club Logo](/HikingClubTripList/wwwroot/img/logo.png)
+![Club Logo|588x386,50%](/HikingClubTripList/wwwroot/img/logo.png)
 
 # Wandering Heights Hiking Club - Trip Pages
 
