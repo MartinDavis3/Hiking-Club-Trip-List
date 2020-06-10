@@ -141,26 +141,20 @@ Maximum Participants: “5”; “5.5”, “1”, “13”
 
 For each entry form.
 1.	Enter valid values in all fields and check there are no error messages and data can be submitted.
+
 2.	For each value field in turn:
-
 a.	Enter one of each type of incorrect value in turn.
-
 b.	Check that a meaningful error message is shown in each case.
-
 c.	Check that the form cannot be submitted.
-
 d.	Return the field to a valid value
-
 e.	Continue to next field
+
 3.	In developer tools, disable running of scripts.
+
 4.	For each value field in turn:
-
 a.	Enter one of each type of incorrect value in turn.
-
 b.	Submit the form.
-
 c.	Check that a meaningful error is returned and no records were changed in the database.
-
 d.	Continue to the next field.
 
 ## Test Trip Controller
