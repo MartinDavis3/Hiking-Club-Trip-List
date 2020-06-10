@@ -44,6 +44,9 @@ The application was built using the .NET Core MVC framework and MySQL database. 
 
 The data base structure consists of a fixed, seeded table of members, the table of trips which is accessed by the application to carry out its functions, and a list of signups, which join these two tables.
  
+ Entity Relationship Diagram for the Database
+ <img src="/HikingClubTripList/wwwroot/img/EntityRelationship.png" width=290 height=130 title="Entity Relationship Diagram" alt="Entity Relationship Diagram"> 
+ 
 The application structure consists of models for trips, members and signups, and login and a view model for the trip details. There are trip, member and signup controllers, each with a service layer handling database functions. There is some error handling included, notably to trap some errors which could be caused by poorly formed routes, and a simple view which is use to communicate the error to the user.
 
 The layout of the pages is styled using CSS and is fully responsive. The style of the pages is deliberately chosen to be fairly minimalist. The information being provided is fairly simple and the members using the website will know what the information means, so lots of detailed explanation is unnecessary. The aim is to present and allow manipulation of the trip and participation list in a simple, uncluttered manner. The colour scheme was chosen to reflect this calm, simple approach and also the natural theme of a hiking club. Most of the colours were adapted from colours found in the picture on the home page, or other natural sources, adjusting mostly the lightness, and sometimes slightly the saturation, as required to give necessary contrast between elements (WCAG AA in all cases WCAG AAA in most cases, Ref. 2).
@@ -60,7 +63,7 @@ Open VS Community 2019:
 2.	Navigate to where the HikingClubTripList folder was created and open it.
 3.	Click on the file: HikingClubTripList.sln.
 4.	Wait while VS Community loads and prepares the solution.
-5.	(If you want to change the name of the database which is created, edit the DefaultConnection string in the file appsettings.json. The default database name is HikingClubTripList.)
+5.	(If you want to change the name of the database which is created, edit the DefaultConnection string in the file appsettings.json. The default database name is HikingClubTripList7.)
 6.	(If you do not wish to have the example dataset loaded, delete the file Data/DbInitialiser.)
 7.	The Application is ready to be run.
 
@@ -78,7 +81,7 @@ This gives a very brief statement of club privacy policy. This is also visible w
 
 ## Login
 
-To be able to see the trip list, you must log in on the Login page. A series of 16 users is included in the demonstration data set. These have username and password combinations of simply: user1, pass1; user2, pass2 etc. Once you are logged in you will see the member name in place of Log In. Click on the username to Log Out.
+To be able to see the trip list, you must log in on the Login page. A series of 16 users is included in the demonstration data set. These have username and password combinations of simply: user1, pass1; user2, pass2 etc. The list of names (you may find a few famous ones hidden in there!) is: 1. Alice Jones, 2. Bob Smith, 3. Charlie McDonald, 4. Konstantin Tsiolkovsky, 5. Satyendra Nath Bose, 6. Emmy Noether, 7. Lisa Cardinal, 8. Abdus Salam, 9. Paul Dirac, 10. Rosalind Franklin, 11. Kenichi Fukui, 12. Cyril Hinshelwood, 13. Gabriel García Márquez, 14. Léopold Senghor, 15. Raymond Bolomey, 16. Elizabeth Bloom, 17. Marie Laframboise, 18. Heather Plaskett, 19. Isaac Levison, 20. Edith Plamondon. Once you are logged in you will see the member name in place of Log In. Click on the username to Log Out.
 
 ## Trips
 
