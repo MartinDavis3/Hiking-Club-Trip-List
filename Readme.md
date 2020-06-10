@@ -45,7 +45,8 @@ The application was built using the .NET Core MVC framework and MySQL database. 
 The data base structure consists of a fixed, seeded table of members, the table of trips which is accessed by the application to carry out its functions, and a list of signups, which join these two tables.
  
  Entity Relationship Diagram for the Database
- <img src="/HikingClubTripList/wwwroot/img/EntityRelationship.png" width=290 height=130 title="Entity Relationship Diagram" alt="Entity Relationship Diagram"> 
+ 
+ <img src="/HikingClubTripList/wwwroot/img/EntityRelationship.png" width=581 height=261 title="Entity Relationship Diagram" alt="Entity Relationship Diagram"> 
  
 The application structure consists of models for trips, members and signups, and login and a view model for the trip details. There are trip, member and signup controllers, each with a service layer handling database functions. There is some error handling included, notably to trap some errors which could be caused by poorly formed routes, and a simple view which is use to communicate the error to the user.
 
